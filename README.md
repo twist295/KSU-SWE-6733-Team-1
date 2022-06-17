@@ -13,5 +13,7 @@ Development Team:
 ## Product Vision:
 
 ### Short-Term:
+What is the near vision of the product for this prototype/project?
 
 ### Long-Term:
+What can this product be in the future? A year later? More time later when we sell it and get rich!
