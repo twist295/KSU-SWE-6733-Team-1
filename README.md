@@ -9,3 +9,9 @@ Development Team:
 - Aparna Sykam
 - Ploynapas Pawachot
 - Fremont Lowe
+
+## Product Vision:
+
+### Short-Term:
+
+### Long-Term:
