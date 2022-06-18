@@ -13,6 +13,7 @@ Development Team:
 ## Product Vision:
 
 ### Short-Term:
+(Functionally Working Prototype)
 Enable Sign Up process for the Website in Home page
 Set up a page for individual introduction
 Set up to update the individual's basic preferences
@@ -22,6 +23,7 @@ Connect the profiles to Instagram, Facebook, and other social media
 Log out feature
 
 ### Long-Term:
+(Market Ready Production Grade App)
 Create a Database to keep the user's record
 Fraud prevention: Report and Block for fraud users
 Geography settings
