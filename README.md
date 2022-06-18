@@ -13,8 +13,12 @@ Development Team:
 ## Product Vision:
 
 ### Short-Term:
+TODO: Turn in this into paragraph vision statement
+
 (Functionally Working Prototype)
 Enable Sign Up process for the Website in Home page
+
+Create a Database to keep the user's record
 
 Set up a page for individual introduction
 
@@ -29,9 +33,9 @@ Connect the profiles to Instagram, Facebook, and other social media
 Log out feature
 
 ### Long-Term:
-(Market Ready Production Grade App)
+TODO: Turn in this into paragraph vision statement
 
-Create a Database to keep the user's record
+(Market Ready Production Grade App)
 
 Fraud prevention: Report and Block for fraud users
 
