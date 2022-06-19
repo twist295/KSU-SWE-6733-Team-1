@@ -13,37 +13,18 @@ Development Team:
 ## Product Vision:
 
 ### Short-Term:
-TODO: Turn in this into paragraph vision statement
+Our Team Group 1 aims to build an app named NextAdventure for all those adventure seekers who wants to visit different adventurous locations for hiking and trekking. 
 
-(Functionally Working Prototype)
-Enable Sign Up process for the Website in Home page
+The NextAdventure is a user friendly website or mobile application for the purpose of meeting all potential members within a single online platform. 
 
-Create a Database to keep the user's record
+It will allow all those enthusiasts to connect, discuss and plan for any outdoor activities. 
 
-Set up a page for individual introduction
-
-Set up to update the individual's basic preferences
-
-Match up the set preferences with available candidates
-
-Check other possible matches
-
-Connect the profiles to Instagram, Facebook, and other social media
-
-Log out feature
+Unlike visiting personally or discuss over phone, this will let the users to post the activity, comment with their preferences, post any suggestions and decide a trip.
 
 ### Long-Term:
-TODO: Turn in this into paragraph vision statement
+On a long run, this application will be extended with the features of different location specified so that people from different part of the country will customize as per their area and utilize the app. 
 
-(Market Ready Production Grade App)
-
-Fraud prevention: Report and Block for fraud users
-
-Geography settings
-
-Enable messaging feature
-
-Paid subscription
+This app will also include cruise, kayaking and also other global tours.
 
 ## Project Management Board
 https://trello.com/b/nvydT0ke/ksu-swe6733-team-1-agile-board
