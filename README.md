@@ -54,14 +54,25 @@ https://trello.com/c/PsFUApHr/30-r9-add-interested-activities
 https://trello.com/c/8Rc0gPTh/31-r10-group-activity
 
 ## Ordering of Product Backlog
+
 (Priority based on importance to app, ordering to unblock dependent features, and optimizing for initial user feedback)
+
 R1: goes first because it is needed before user can do anything else.
+
 R2: profile needed to share about myself
+
 R7: location
+
 R9: add interested activities
+
 R4: connecting with people based on their profiles
+
 R3: communicating with the people I've connected with
+
 R8: creating activities
+
 R5: initial version of the app can be mostly functional for gathering feedback, w/o notifications.
+
 R10: creating group activities
+
 R6: social integrations not really needed for testing core app
