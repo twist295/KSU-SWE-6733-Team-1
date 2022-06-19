@@ -27,4 +27,28 @@ On a long run, this application will be extended with the features of different 
 This app will also include cruise, kayaking and also other global tours.
 
 ## Project Management Board
+
+Supporting artifacts, user stories, product backlog, and sprint artifacts can be found here!
+
 https://trello.com/b/nvydT0ke/ksu-swe6733-team-1-agile-board
+
+## Definitions of Ready
+https://trello.com/c/5jwLnLhH/22-r1-access-to-application
+
+https://trello.com/c/pMQnO7xr/23-r2-profile
+
+https://trello.com/c/ypMOAoLj/24-r3-communicate-with-people
+
+https://trello.com/c/UEtgC6DK/25-r4-connect-with-similar-interest-people
+
+https://trello.com/c/qT88fwBS/26-r5-get-similar-interest-notifications
+
+https://trello.com/c/svcvPfaf/27-r6-connect-to-social-apps
+
+https://trello.com/c/7Dy6Hf2B/28-r7-add-location
+
+https://trello.com/c/EKJBTv5x/29-r8-create-adventure-activities
+
+https://trello.com/c/PsFUApHr/30-r9-add-interested-activities
+
+https://trello.com/c/8Rc0gPTh/31-r10-group-activity
