@@ -29,50 +29,49 @@ This app will also include cruise, kayaking and also other global tours.
 ## Project Management Board
 
 Supporting artifacts, user stories, product backlog, and sprint artifacts can be found here!
-
-https://trello.com/b/nvydT0ke/ksu-swe6733-team-1-agile-board
+[Trello Board](https://trello.com/b/nvydT0ke/ksu-swe6733-team-1-agile-board)
 
 ## Definitions of Ready
-https://trello.com/c/5jwLnLhH/22-r1-access-to-application
+[Access to Application](https://trello.com/c/5jwLnLhH/22-r1-access-to-application)
 
-https://trello.com/c/pMQnO7xr/23-r2-profile
+[User Profile](https://trello.com/c/pMQnO7xr/23-r2-profile)
 
-https://trello.com/c/ypMOAoLj/24-r3-communicate-with-people
+[Communication](https://trello.com/c/ypMOAoLj/24-r3-communicate-with-people)
 
-https://trello.com/c/UEtgC6DK/25-r4-connect-with-similar-interest-people
+[Connecting with Other Users](https://trello.com/c/UEtgC6DK/25-r4-connect-with-similar-interest-people)
 
-https://trello.com/c/qT88fwBS/26-r5-get-similar-interest-notifications
+[Notifications](https://trello.com/c/qT88fwBS/26-r5-get-similar-interest-notifications)
 
-https://trello.com/c/svcvPfaf/27-r6-connect-to-social-apps
+[Social App Integration](https://trello.com/c/svcvPfaf/27-r6-connect-to-social-apps)
 
-https://trello.com/c/7Dy6Hf2B/28-r7-add-location
+[Location](https://trello.com/c/7Dy6Hf2B/28-r7-add-location)
 
-https://trello.com/c/EKJBTv5x/29-r8-create-adventure-activities
+[Create Activity](https://trello.com/c/EKJBTv5x/29-r8-create-adventure-activities)
 
-https://trello.com/c/PsFUApHr/30-r9-add-interested-activities
+[Add Interests](https://trello.com/c/PsFUApHr/30-r9-add-interested-activities)
 
-https://trello.com/c/8Rc0gPTh/31-r10-group-activity
+[Group Activities](https://trello.com/c/8Rc0gPTh/31-r10-group-activity)
 
 ## Ordering of Product Backlog
 
 (Priority based on importance to app, ordering to unblock dependent features, and optimizing for initial user feedback)
 
-R1: goes first because it is needed before user can do anything else.
+[Access to Application](https://trello.com/c/5jwLnLhH/22-r1-access-to-application) goes first because it is needed before user can do anything else.
 
-R2: profile needed to share about myself
+[User Profile](https://trello.com/c/pMQnO7xr/23-r2-profile) is second because users will need to create profiles to share about themselves.
 
-R7: location
+[Location](https://trello.com/c/7Dy6Hf2B/28-r7-add-location) comes next because location will play role in matching and will be displayed in the profile.
 
-R9: add interested activities
+[Add Interests](https://trello.com/c/PsFUApHr/30-r9-add-interested-activities) comes after because interested activities should be in the existing profile.
 
-R4: connecting with people based on their profiles
+[Connecting with Other Users](https://trello.com/c/UEtgC6DK/25-r4-connect-with-similar-interest-people) is after because now profiles exist for users to use when deciding when to match or not.
 
-R3: communicating with the people I've connected with
+[Communication](https://trello.com/c/ypMOAoLj/24-r3-communicate-with-people) is next so those users that do connect can now communicate with each other.
 
-R8: creating activities
+[Create Activity](https://trello.com/c/EKJBTv5x/29-r8-create-adventure-activities) follows so users can set an activity with adventure partners they've chatted with.
 
-R5: initial version of the app can be mostly functional for gathering feedback, w/o notifications.
+[Notifications](https://trello.com/c/qT88fwBS/26-r5-get-similar-interest-notifications) is a "nice to have" since the initial version of the app can be mostly functional for gathering feedback without this feature.
 
-R10: creating group activities
+[Group Activities](https://trello.com/c/8Rc0gPTh/31-r10-group-activity) is also a "nice to have"
 
-R6: social integrations not really needed for testing core app
+[Social App Integration](https://trello.com/c/svcvPfaf/27-r6-connect-to-social-apps) is lowest priority since social integrations are not really needed for testing the core app.
