@@ -1,4 +1,4 @@
-import { getApps, initializeApp } from 'firebase/app'
+import { initializeApp } from 'firebase/app'
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 import { useEffect, useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import AuthScreen from './src/screens/AuthScreen/AuthScreen'
 import InboxScreen from './src/screens/InboxScreen/InboxScreen'
 import MatchScreen from './src/screens/MatchScreen/MatchScreen'
+import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen'
 import SignupScreen from './src/screens/SignupScreen/SignupScreen'
 
 const Tab = createBottomTabNavigator();
@@ -41,6 +42,7 @@ export default function App() {
         <Tab.Navigator>
           <Tab.Screen name="Inbox" component={InboxScreen} />
           <Tab.Screen name="Match" component={MatchScreen} />
+          <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>
       ) : (
         <Stack.Navigator>
