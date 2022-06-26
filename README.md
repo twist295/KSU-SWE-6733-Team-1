@@ -79,3 +79,13 @@ Supporting artifacts, user stories, product backlog, and sprint artifacts can be
 ## Sprint Story Points Forecast & Rationale
 
 [Sprint Story Points Forecast & Rationale](https://trello.com/c/jRPklVqg/48-story-point-forecast-rationale)
+
+## Mob Programming Session
+![Hangout SS](https://user-images.githubusercontent.com/10526932/175825107-125c50d7-4074-4e29-be11-48846f0ee78b.png)
+
+In our mob programming session on 6/26/22, we:
+- Found two bugs with login.
+    - the login password text field should have secure text enabled which was done during the call.
+    - the login network request wasn't using the text input values and always failing.
+- This led to us realizing that there were some areas to improve related to clearer error states for the user.
+- Implemented signing out of an account together.
