@@ -75,3 +75,7 @@ Supporting artifacts, user stories, product backlog, and sprint artifacts can be
 [Group Activities](https://trello.com/c/8Rc0gPTh/31-r10-group-activity) is also a "nice to have"
 
 [Social App Integration](https://trello.com/c/svcvPfaf/27-r6-connect-to-social-apps) is lowest priority since social integrations are not really needed for testing the core app.
+
+## Sprint Story Points Forecast & Rationale
+
+[Sprint Story Points Forecast & Rationale](https://trello.com/c/jRPklVqg/48-story-point-forecast-rationale)
