@@ -10,6 +10,23 @@ Development Team:
 - Ploynapas Pawachot
 - Fremont Lowe
 
+## Setup
+
+Go through this documentation and set up your environment using the "Expo CLI" instructions where indicated:
+[React Native](https://reactnative.dev/docs/getting-started)
+
+Make sure you have Git set up:
+[GitHub](https://docs.github.com/en/get-started/quickstart)
+
+Make sure you have Node/NPM installed:
+[NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+
+Clone the repository to your machine and navigate to it in your CLI, the repo will be named "KSU-SWE-6733-Team-1".
+
+Once there navigate to the NextAdventure directory using `cd NextAdventure` (or whatever the Windows alternate is), and run `npm start`.
+
+Follow the instructions and the app should start in an emulator on your machine!
+
 ## Product Vision:
 
 ### Short-Term:
