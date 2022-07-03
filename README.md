@@ -146,3 +146,18 @@ Mohan:
 - I dont have any blockers
 
 ## Sprint Review (July 3, 2022)
+
+- Constructed our first story point forecast as our initial baseline!
+
+![Screen Shot 2022-07-03 at 7 53 41 AM](https://user-images.githubusercontent.com/10526932/177045292-310b7fc1-7039-4890-9466-7d85ec8d94b8.png)
+
+- We also made some progress in the app development by mob programming (See the "Mob Programming Session" section above)!
+
+- We also took our product backlog items and started turning them into tasks that can be pulled into sprints:
+
+![Screen Shot 2022-07-03 at 7 55 53 AM](https://user-images.githubusercontent.com/10526932/177045381-6c485393-d215-44c2-a760-70067eef9301.png)
+
+- We also started scaffolding out the program itself with fully functional signup/login/signout authentication:
+
+![Simulator Screen Shot - iPhone 8 - 2022-07-03 at 07 59 34](https://user-images.githubusercontent.com/10526932/177045485-acf8d4db-c8d8-4e88-815e-3ce7c61638b1.png)
+
