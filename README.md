@@ -112,3 +112,11 @@ In our mob programming session on 6/26/22, we:
     - the login network request wasn't using the text input values and always failing.
 - This led to us realizing that there were some areas to improve related to clearer error states for the user.
 - Implemented signing out of an account together.
+
+## Test Suite
+
+This project uses Enzyme, Jest, and Mocha for testing. 
+
+All test files are contained in the same folder of the files they test against. I.e. `AuthScreen.test.tsx` holds the test cases for `AuthScreen.tsx` in the `src/screens/AuthScreen` directory.
+
+A plugin will eventually be added to the repository to indicate coverage and test suite status in a future sprint.
