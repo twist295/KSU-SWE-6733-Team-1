@@ -1,10 +1,11 @@
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { 
   Button, StyleSheet, TextInput, View 
 } from 'react-native'
+import { Props } from './AuthScreen.type'
 
-const AuthScreen = ({ navigation }) => {
+const AuthScreen: FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -19,10 +20,17 @@ const AuthScreen = ({ navigation }) => {
 
   return (
     <View>
-      <TextInput placeholder="Email" />
-      <TextInput placeholder="Password" />
+      <TextInput 
+        onChange={({ nativeEvent }) => setEmail(nativeEvent.text)} 
+        placeholder="Email" 
+        value={email} />
+      <TextInput 
+        onChange={({ nativeEvent }) => setPassword(nativeEvent.text)} 
+        placeholder="Password" 
+        secureTextEntry 
+        value={password} />
       <Button onPress={onLogin} title="Login" />
-      <Button onPress={() => navigation.navigate('Signup')} title="Sign Up" />
+      <Button onPress={() => navigation.navigate('Signup')} testID="signup-button" title="Sign Up" />
     </View>
   )
 }

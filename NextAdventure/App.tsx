@@ -4,14 +4,15 @@ import { useEffect, useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { StackParamList } from './App.type'
 import AuthScreen from './src/screens/AuthScreen/AuthScreen'
 import InboxScreen from './src/screens/InboxScreen/InboxScreen'
 import MatchScreen from './src/screens/MatchScreen/MatchScreen'
 import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen'
 import SignupScreen from './src/screens/SignupScreen/SignupScreen'
 
-const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator()
+const Tab = createBottomTabNavigator()
+const Stack = createNativeStackNavigator<StackParamList>()
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
@@ -29,9 +30,10 @@ export default function App() {
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
-      console.log(user)
       if (user) {
         setSignedIn(true);
+      } else {
+        setSignedIn(false);
       }
     })
   }, [])

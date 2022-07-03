@@ -26,7 +26,7 @@ const SignupScreen = () => {
         placeholder="Password" 
         secureTextEntry 
         value={password} />
-      <Button onPress={signup} title="Sign Up"/>
+      <Button onPress={signup} title="Sign Up" />
     </View>
   )
 }
