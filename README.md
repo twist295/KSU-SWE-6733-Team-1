@@ -15,6 +15,8 @@ Development Team:
 Go through this documentation and set up your environment using the "Expo CLI" instructions where indicated:
 [React Native](https://reactnative.dev/docs/getting-started)
 
+[Expo](https://docs.expo.dev)
+
 Make sure you have Git set up:
 [GitHub](https://docs.github.com/en/get-started/quickstart)
 
@@ -115,8 +117,32 @@ In our mob programming session on 6/26/22, we:
 
 ## Test Suite
 
-This project uses Enzyme, Jest, and Mocha for testing. 
+This project uses Enzyme, Jest, and Mocha for testing.
 
 All test files are contained in the same folder of the files they test against. I.e. `AuthScreen.test.tsx` holds the test cases for `AuthScreen.tsx` in the `src/screens/AuthScreen` directory.
 
 A plugin will eventually be added to the repository to indicate coverage and test suite status in a future sprint.
+
+
+## Daily Scrum (From July 1, 2022)
+Alvin:
+- I added some dependencies needed for our test suite to work with our stack and started adding coverage to the authentication flows.
+- I will then add more test coverage around the sign up and sign out flows.
+- Not really a blocker, but work was busy this week so I didn't have the bandwidth I initially expected to have for this sprint.
+
+Aparna:
+- Broke down outstanding product backlog items into tasks that can be pulled into sprints
+- Continue refining backlog items and task breakdown
+- Only blocker is not feeling well so limited bandwidth
+
+Ploynapas:
+- I forecasted user stories for Sprint 1. 
+- Conducted sprint review, and continuing to monitor forecast to improve for next Sprint.
+- No blockers
+
+Mohan:
+- Yesterday, I worked on reviewing the code
+- Reviewing code and kanban board items as it relates to the product development
+- I dont have any blockers
+
+## Sprint Review (July 3, 2022)
