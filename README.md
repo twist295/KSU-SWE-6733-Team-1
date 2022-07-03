@@ -10,6 +10,23 @@ Development Team:
 - Ploynapas Pawachot
 - Fremont Lowe
 
+## Setup
+
+Go through this documentation and set up your environment using the "Expo CLI" instructions where indicated:
+[React Native](https://reactnative.dev/docs/getting-started)
+
+Make sure you have Git set up:
+[GitHub](https://docs.github.com/en/get-started/quickstart)
+
+Make sure you have Node/NPM installed:
+[NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+
+Clone the repository to your machine and navigate to it in your CLI, the repo will be named "KSU-SWE-6733-Team-1".
+
+Once there navigate to the NextAdventure directory using `cd NextAdventure` (or whatever the Windows alternate is), and run `npm start`.
+
+Follow the instructions and the app should start in an emulator on your machine!
+
 ## Product Vision:
 
 ### Short-Term:
@@ -75,3 +92,17 @@ Supporting artifacts, user stories, product backlog, and sprint artifacts can be
 [Group Activities](https://trello.com/c/8Rc0gPTh/31-r10-group-activity) is also a "nice to have"
 
 [Social App Integration](https://trello.com/c/svcvPfaf/27-r6-connect-to-social-apps) is lowest priority since social integrations are not really needed for testing the core app.
+
+## Sprint Story Points Forecast & Rationale
+
+[Sprint Story Points Forecast & Rationale](https://trello.com/c/jRPklVqg/48-story-point-forecast-rationale)
+
+## Mob Programming Session
+![Hangout SS](https://user-images.githubusercontent.com/10526932/175825107-125c50d7-4074-4e29-be11-48846f0ee78b.png)
+
+In our mob programming session on 6/26/22, we:
+- Found two bugs with login.
+    - the login password text field should have secure text enabled which was done during the call.
+    - the login network request wasn't using the text input values and always failing.
+- This led to us realizing that there were some areas to improve related to clearer error states for the user.
+- Implemented signing out of an account together.
