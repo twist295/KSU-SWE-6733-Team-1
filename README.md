@@ -97,6 +97,12 @@ Supporting artifacts, user stories, product backlog, and sprint artifacts can be
 
 [Sprint Story Points Forecast & Rationale](https://trello.com/c/jRPklVqg/48-story-point-forecast-rationale)
 
+## Sprint Burndown Chart
+
+The burndown chart for our sprints can be accessed by pressing this button in the Trello board:
+
+![Screen Shot 2022-07-03 at 7 14 54 AM](https://user-images.githubusercontent.com/10526932/177043789-eda31942-b99b-4f7a-a907-1eedc9876632.png)
+
 ## Mob Programming Session
 ![Hangout SS](https://user-images.githubusercontent.com/10526932/175825107-125c50d7-4074-4e29-be11-48846f0ee78b.png)
 
