@@ -7,14 +7,14 @@ import {
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { StackParamList } from './App.type'
+import { StackParamList, TabParamList } from './App.type'
 import AuthScreen from './src/screens/AuthScreen/AuthScreen'
 import InboxScreen from './src/screens/InboxScreen/InboxScreen'
 import MatchScreen from './src/screens/MatchScreen/MatchScreen'
 import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen'
 import SignupScreen from './src/screens/SignupScreen/SignupScreen'
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator<TabParamList>()
 const Stack = createNativeStackNavigator<StackParamList>()
 
 export default function App() {

@@ -1,49 +1,87 @@
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth, signOut } from 'firebase/auth';
+import { 
+  FC, useEffect, useState } from 'react'
 import {
   Button,
-  FlatList, 
-  Image, StyleSheet, Text, View 
+  Image, 
+  StyleSheet, Text,
+  TextInput,
+  View 
 } from 'react-native'
+import { Props } from './ProfileScreen.type'
+import {
+  getProfile, setProfile } from '../../utils/Firebase'
 
-type Adventure = {
-  skillLevel: string
-  type: string
-}
+const ProfileScreen: FC<Props> = ({ navigation }) => {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [isEditing, setIsEditing] = useState(false)
 
-const MOCK_ADVENTURES: Adventure[] = [
-  { type: 'Skiing', skillLevel: 'proficient' },
-  { type: 'Backpacking' }
-]
+  useEffect(() => {
+    getProfile()
+      .then(profile => {
+        console.log({ profile })
+        if (!profile) {
+          setIsEditing(true)
+          return
+        }
+      })
+      .catch(err => console.log(err))
+  }, [])
 
-const ProfileScreen = () => {
+  useEffect(() => {
+    navigation.setOptions({ 
+      headerLeft: () => isEditing ? <Button color="red" title="Cancel" onPress={() => setIsEditing(false)}/> : <></>,
+      headerRight: () => isEditing ? (
+        <Button title="Save" onPress={() => save()} />
+      ) : (
+        <Button title="Edit" onPress={() => setIsEditing(true)}/>
+      )
+    })
+  }, [isEditing])
+
+  const save = async () => {
+    setProfile({ firstName, lastName })
+  }
+
   const signout = async () => {
     const auth = getAuth()
     await signOut(auth)
   }
 
-  const renderAdventure = ({ item }: {item: Adventure}) => {
-    return (
-      <View><Text>{item.type}</Text></View>
-    )
-  }
-
   return (
-    <View>
-      <Image
-        source={{ uri: 'https://pbs.twimg.com/profile_images/914711826662936576/Rp5dIges_400x400.jpg' }} 
-        style={styles.pfp} />
-      <Text>Mohan</Text>
-      <FlatList data={MOCK_ADVENTURES} renderItem={renderAdventure} />
-      <Button title="Sign Out" onPress={signout} />
+    <View style={styles.container}>
+      <View>
+        <Image
+          source={{ uri: 'https://pbs.twimg.com/profile_images/914711826662936576/Rp5dIges_400x400.jpg' }}
+          style={styles.pfp} />
+        { isEditing ? (
+          <TextInput placeholder="First Name" value={firstName} onChange={({ nativeEvent }) => setFirstName(nativeEvent.text)} />
+        ) :  <Text>{firstName}</Text> }
+        { isEditing ? <TextInput placeholder="Last Name" value={lastName} /> :  <Text></Text> }
+        {/* { isEditing ? <TextInput placeholder="Location" /> :  <Text></Text> } */}
+      </View>
+      <View style={styles.signout}>
+        <Button color="red" title="Sign Out" onPress={signout} />
+      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-between',
+    padding: 16,
+  },
   pfp: {
+    alignSelf: 'center',
     borderRadius: 44,
     height: 88,
     width: 88
+  },
+  signout: {
+    borderWidth: 1
   }
 })
 

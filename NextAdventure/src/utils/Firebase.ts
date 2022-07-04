@@ -6,8 +6,17 @@ import {
 import {
   addDoc,
   collection,
-  getFirestore
+  doc,
+  getDoc,
+  getFirestore,
+  setDoc,
 } from 'firebase/firestore'
+
+type Profile = {
+  firstName: string
+  lastName: string
+  // location: string
+}
 
 /**
  * 
@@ -31,4 +40,27 @@ export const createUser = async (email: string, password: string) => {
 export const signIn = async (email: string, password: string) => {
   const auth = getAuth()
   await signInWithEmailAndPassword(auth, email, password)
+}
+
+export const setProfile = async (profile: Profile) => {
+  const auth = getAuth()
+  const db = getFirestore();
+
+  return await setDoc(doc(db, 'profiles', auth.currentUser!.uid), {
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+    // location: profile.location
+  })
+}
+
+export const getProfile = async (): Promise<Profile | null> => {
+  const auth = getAuth()
+  const db = getFirestore();
+
+  const profile = await getDoc(doc(db, 'profiles', auth.currentUser!.uid))
+  if (profile.exists()) {
+    return Promise.resolve(profile.data() as Profile)
+  } else {
+    return Promise.resolve(null)
+  }
 }
