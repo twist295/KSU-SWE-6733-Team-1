@@ -1,6 +1,9 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, onAuthStateChanged } from "firebase/auth"
-import { useEffect, useState } from 'react'
+import {
+  useEffect,
+  useState
+} from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -30,11 +33,7 @@ export default function App() {
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setSignedIn(true);
-      } else {
-        setSignedIn(false);
-      }
+      setSignedIn(!!user)
     })
   }, [])
 

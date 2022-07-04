@@ -1,18 +1,20 @@
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { FC, useState } from 'react'
 import { 
-  Button, StyleSheet, TextInput, View 
+  Button, 
+  StyleSheet, 
+  TextInput, 
+  View 
 } from 'react-native'
 import { Props } from './AuthScreen.type'
+import { signIn } from '../../utils/Firebase'
 
 const AuthScreen: FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const onLogin = async () => {
-    const auth = getAuth()
     try {
-      await signInWithEmailAndPassword(auth, email, password)
+      signIn(email, password)
     } catch (err) {
       console.log(err)
     }
@@ -30,7 +32,10 @@ const AuthScreen: FC<Props> = ({ navigation }) => {
         secureTextEntry 
         value={password} />
       <Button onPress={onLogin} title="Login" />
-      <Button onPress={() => navigation.navigate('Signup')} testID="signup-button" title="Sign Up" />
+      <Button
+        onPress={() => navigation.navigate('Signup')}
+        testID="signup-button"
+        title="Sign Up" />
     </View>
   )
 }

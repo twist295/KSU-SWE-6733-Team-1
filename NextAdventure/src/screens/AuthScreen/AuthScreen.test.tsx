@@ -15,8 +15,16 @@ describe('Screens > AuthScreen', () => {
 
     const route: Partial<Route> = {};
 
-    const wrapper = shallow(<AuthScreen navigation={navigation as Navigation} route={route as Route} />)
-    const signupButton = wrapper.findWhere((w) => w.prop('testID') === 'signup-button').first()
+    const wrapper = shallow(
+      <AuthScreen
+        navigation={navigation as Navigation}
+        route={route as Route} />
+    )
+
+    const signupButton = wrapper
+      .findWhere((w) => w.prop('testID') === 'signup-button')
+      .first()
+
     signupButton.props().onPress()
     expect(navigate).toHaveBeenCalledWith('Signup')
   })
