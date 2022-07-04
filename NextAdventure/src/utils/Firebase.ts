@@ -23,6 +23,11 @@ export const createUser = async (email: string, password: string) => {
   })
 }
 
+/**
+ * 
+ * @param email 
+ * @param password 
+ */
 export const signIn = async (email: string, password: string) => {
   const auth = getAuth()
   await signInWithEmailAndPassword(auth, email, password)

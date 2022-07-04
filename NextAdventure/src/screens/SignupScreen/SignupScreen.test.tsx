@@ -8,7 +8,7 @@ jest.mock('../../utils/Firebase', () => ({
 }))
 
 describe('Screens > SignupScreen', () => {
-  it('should create user using the input field values', () => {
+  it('should create user when sign up pressed', () => {
     const wrapper = shallow(<SignupScreen />)
 
     const signupButton = getComponent(wrapper, 'signup-button')
@@ -41,7 +41,7 @@ describe('Screens > SignupScreen', () => {
     expect(createUser).toHaveBeenCalled()
   })
 
-  it('should not try creating a user if any field is empty', () => {
+  it('should disable button if any field is empty', () => {
     const wrapper = shallow(<SignupScreen />)
 
     const signupButton = getComponent(wrapper, 'signup-button')

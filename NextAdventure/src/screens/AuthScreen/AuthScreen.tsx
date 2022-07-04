@@ -1,5 +1,6 @@
 import { FC, useState } from 'react'
-import { 
+import {
+  Alert,
   Button, 
   StyleSheet, 
   TextInput, 
@@ -25,13 +26,19 @@ const AuthScreen: FC<Props> = ({ navigation }) => {
       <TextInput 
         onChange={({ nativeEvent }) => setEmail(nativeEvent.text)} 
         placeholder="Email" 
+        testID="email-input"
         value={email} />
       <TextInput 
         onChange={({ nativeEvent }) => setPassword(nativeEvent.text)} 
         placeholder="Password" 
         secureTextEntry 
+        testID="password-input"
         value={password} />
-      <Button onPress={onLogin} title="Login" />
+      <Button 
+        disabled={email.length === 0 || password.length === 0}
+        onPress={onLogin} 
+        testID="login-button"
+        title="Login" />
       <Button
         onPress={() => navigation.navigate('Signup')}
         testID="signup-button"
