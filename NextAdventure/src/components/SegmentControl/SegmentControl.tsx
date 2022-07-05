@@ -27,11 +27,13 @@ const SegmentControl: FC<Props> = ({ items, onChangeIndex, selectedIndex }) => {
           ...styles.item, 
           backgroundColor: 'rgb(14, 122, 254)' 
         } : styles.item
+
         return (
           <TouchableOpacity
             key={index}
             onPress={() => onChangeIndex(index)}
-            style={style}>
+            style={style} 
+            testID={index === selectedIndex ? `touchable-selected` : 'touchable-unselected'}>
             <Text>{item}</Text>
           </TouchableOpacity>
         )})}
