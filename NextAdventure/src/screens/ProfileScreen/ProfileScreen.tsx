@@ -1,20 +1,30 @@
 import { getAuth, signOut } from 'firebase/auth';
 import { 
-  FC, useEffect, useState } from 'react'
+  FC,
+  useEffect,
+  useState
+} from 'react'
 import {
   Button,
+  FlatList,
   Image, 
-  StyleSheet, Text,
+  StyleSheet, 
+  Text,
   TextInput,
   View 
 } from 'react-native'
 import { Props } from './ProfileScreen.type'
+import ActivityModal from '../../components/ActivityModal/ActivityModal'
 import {
-  getProfile, setProfile } from '../../utils/Firebase'
+  getProfile,
+  setProfile
+} from '../../utils/Firebase'
 
 const ProfileScreen: FC<Props> = ({ navigation }) => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
+  const [favoriteActivities, setFavoriteActivites] = useState([])
+  const [isAddingActivity, setIsAddingActivity] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
@@ -25,13 +35,18 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
           setIsEditing(true)
           return
         }
+
+        setFirstName(profile.firstName)
+        setLastName(profile.lastName)
       })
       .catch(err => console.log(err))
   }, [])
 
   useEffect(() => {
     navigation.setOptions({ 
-      headerLeft: () => isEditing ? <Button color="red" title="Cancel" onPress={() => setIsEditing(false)}/> : <></>,
+      headerLeft: () => isEditing ? (
+        <Button color="red" title="Cancel" onPress={() => setIsEditing(false)}/>
+      ) : <></>,
       headerRight: () => isEditing ? (
         <Button title="Save" onPress={() => save()} />
       ) : (
@@ -41,7 +56,12 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
   }, [isEditing])
 
   const save = async () => {
-    setProfile({ firstName, lastName })
+    try {
+      await setProfile({ firstName, lastName, favoriteActivities })
+      setIsEditing(false)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const signout = async () => {
@@ -56,14 +76,26 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
           source={{ uri: 'https://pbs.twimg.com/profile_images/914711826662936576/Rp5dIges_400x400.jpg' }}
           style={styles.pfp} />
         { isEditing ? (
-          <TextInput placeholder="First Name" value={firstName} onChange={({ nativeEvent }) => setFirstName(nativeEvent.text)} />
-        ) :  <Text>{firstName}</Text> }
-        { isEditing ? <TextInput placeholder="Last Name" value={lastName} /> :  <Text></Text> }
+          <TextInput 
+            onChange={({ nativeEvent }) => setFirstName(nativeEvent.text)}
+            placeholder="First Name" 
+            value={firstName} />
+        ) : <Text>{firstName}</Text> }
+        { isEditing ? (
+          <TextInput 
+            onChange={({ nativeEvent }) => setLastName(nativeEvent.text)} 
+            placeholder="Last Name" 
+            value={lastName} />
+        ) :  <Text>{lastName}</Text> }
         {/* { isEditing ? <TextInput placeholder="Location" /> :  <Text></Text> } */}
+        <FlatList
+          ListHeaderComponent={<Text>Favorite Activities</Text>} 
+          ListFooterComponent={<Button title="Add New" onPress={() => setIsAddingActivity(true)}/> }/>
       </View>
       <View style={styles.signout}>
         <Button color="red" title="Sign Out" onPress={signout} />
       </View>
+      <ActivityModal visible={isAddingActivity} onDismiss={() => setIsAddingActivity(false)}/>
     </View>
   )
 }

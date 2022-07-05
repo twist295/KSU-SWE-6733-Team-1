@@ -11,11 +11,13 @@ import {
   getFirestore,
   setDoc,
 } from 'firebase/firestore'
+import type { Activity } from './Type'
 
 type Profile = {
   firstName: string
   lastName: string
   // location: string
+  favoriteActivities: Activity[]
 }
 
 /**
@@ -50,6 +52,7 @@ export const setProfile = async (profile: Profile) => {
     firstName: profile.firstName,
     lastName: profile.lastName,
     // location: profile.location
+    favoriteActivities: profile.favoriteActivities
   })
 }
 
