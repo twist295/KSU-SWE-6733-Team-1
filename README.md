@@ -10,7 +10,9 @@ Development Team:
 - Ploynapas Pawachot
 - Fremont Lowe
 
-## Setup
+## Setup 
+**If you are developing this application and/or want to view the current state of the application, follow the below instructions:**
+
 
 Go through this documentation and set up your environment using the "Expo CLI" instructions where indicated:
 [React Native](https://reactnative.dev/docs/getting-started)
