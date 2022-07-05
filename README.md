@@ -123,6 +123,9 @@ All test files are contained in the same folder of the files they test against. 
 
 A plugin will eventually be added to the repository to indicate coverage and test suite status in a future sprint.
 
+As of 8/5/2022, our test coverage comprised of 10 tests across 3 test suites:
+
+<img width="507" alt="Screen Shot 2022-07-05 at 3 13 30 PM" src="https://user-images.githubusercontent.com/10526932/177429014-3ab42dd4-e75c-4af4-9770-38041d520432.png">
 
 ## Daily Scrum (From July 1, 2022)
 Alvin:
