@@ -2,7 +2,7 @@ import { shallow } from 'enzyme'
 import AuthScreen from './AuthScreen'
 import { Props } from './AuthScreen.type'
 import { signIn } from '../../utils/Firebase'
-import { getComponent } from '../../utils/Test'
+import { componentExists, getComponent } from '../../utils/Test'
 
 jest.mock('../../utils/Firebase', () => ({
   signIn: jest.fn()
@@ -78,9 +78,35 @@ describe('Screens > AuthScreen', () => {
 
     expect(emailInput.props().value).toBe('test@test.com')
     expect(passwordInput.props().value).toBe('test1231')
-    expect(loginButton.props().disabled).toBeFalsy
 
     loginButton.props().onPress()
     expect(signIn).toHaveBeenCalled()
+  })
+
+  it('should hide password field when resetting password', () => {
+    const navigation: Partial<Navigation> = {}
+    const route: Partial<Route> = {};
+    const wrapper = shallow(
+      <AuthScreen 
+        navigation={navigation as Navigation}
+        route={route as Route}/>
+    )
+
+    expect(componentExists(wrapper, 'reset-pw-button')).toBeFalsy()
+  })
+
+  it('should show password field when resetting password', () => {
+    const navigation: Partial<Navigation> = {}
+    const route: Partial<Route> = {};
+    const wrapper = shallow(
+      <AuthScreen 
+        navigation={navigation as Navigation}
+        route={route as Route}/>
+    )
+
+    const forgotPasswordPressable = getComponent(wrapper, 'forgot-pw-button')
+    forgotPasswordPressable.props().onPress()
+
+    expect(componentExists(wrapper, 'reset-pw-button')).toBeTruthy()
   })
 })

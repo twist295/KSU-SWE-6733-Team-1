@@ -1,6 +1,7 @@
 import {
   getAuth,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword
 } from 'firebase/auth'
 import {
@@ -32,6 +33,11 @@ export const createUser = async (email: string, password: string) => {
   await addDoc(collection(db, 'users'), {
     uid: user.user.uid
   })
+}
+
+export const sendPWResetEmail = async (email: string) => {
+  const auth = getAuth()
+  await sendPasswordResetEmail(auth, email)
 }
 
 /**
