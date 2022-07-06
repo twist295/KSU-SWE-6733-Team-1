@@ -1,3 +1,4 @@
+import { launchImageLibraryAsync } from 'expo-image-picker'
 import { 
   FC,
   useEffect,
@@ -7,9 +8,10 @@ import {
   Button,
   FlatList,
   Image, 
-  StyleSheet, 
+  StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View 
 } from 'react-native'
 import { Props } from './ProfileScreen.type'
@@ -18,7 +20,8 @@ import {
   getProfile,
   getUser,
   setProfile,
-  signout
+  signout,
+  updateProfilePicture
 } from '../../utils/Firebase'
 import { Attitude, SkillLevel, getEnumKeys } from '../../utils/Type'
 import type { Activity } from '../../utils/Type'
@@ -30,6 +33,8 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
   const [isAddingActivity, setIsAddingActivity] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [editingActivity, setEditingActivity] = useState<number>(-1)
+  const [pictureUrl, setPictureUrl] = useState<string | null>(null)
+  const [hasUpdatedPFP, setHasUpdatedPFP] = useState(false)
 
   useEffect(() => {
     getProfile()
@@ -44,6 +49,11 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
         setFavoriteActivites(profile.favoriteActivities)
       })
       .catch(err => console.log(err))
+    
+    const user = getUser()
+    if (!!user) {
+      setPictureUrl(user.photoURL)
+    }
   }, [])
 
   useEffect(() => {
@@ -79,6 +89,11 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
   const save = async () => {
     try {
       await setProfile({ firstName, lastName, favoriteActivities })
+
+      if (hasUpdatedPFP) {
+        const uri = await updateProfilePicture(pictureUrl!)
+        console.log({ uri })
+      }
       setIsEditing(false)
     } catch (err) {
       console.log(err)
@@ -102,12 +117,34 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
     )
   }
 
+  const renderProfilePicture = () => {
+    if (!pictureUrl) {
+      return <TouchableOpacity disabled={!isEditing} onPress={pickImage} style={styles.emptyPfp}/>
+    }
+
+    return (
+      <TouchableOpacity disabled={!isEditing} onPress={pickImage}>
+        <Image
+          source={{ uri: pictureUrl }}
+          style={styles.pfp} />
+      </TouchableOpacity>
+    )
+  }
+
+  const pickImage = async () => {
+    const result = await launchImageLibraryAsync({})
+    if (result.cancelled) {
+      return
+    }
+
+    setPictureUrl(result.uri)
+    setHasUpdatedPFP(true)
+  }
+
   return (
     <View style={styles.container}>
       <View>
-        <Image
-          source={{ uri: 'https://pbs.twimg.com/profile_images/914711826662936576/Rp5dIges_400x400.jpg' }}
-          style={styles.pfp} />
+        {renderProfilePicture()}
         <Text style={styles.header}>Personal Info</Text>
         <View style={styles.name}>
           <Text>Name: </Text>
@@ -166,6 +203,13 @@ const styles = StyleSheet.create({
   },
   editActivityButton: {
     justifyContent: 'center'
+  },
+  emptyPfp: {
+    alignSelf: 'center',
+    backgroundColor: 'gray',
+    borderRadius: 44,
+    height: 88,
+    width: 88
   },
   favoriteActivities: {
     marginTop: 16

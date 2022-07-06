@@ -3,7 +3,8 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  signOut
+  signOut,
+  updateProfile
 } from 'firebase/auth'
 import {
   addDoc,
@@ -13,6 +14,7 @@ import {
   getFirestore,
   setDoc,
 } from 'firebase/firestore'
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import type { Activity } from './Type'
 
 type Profile = {
@@ -80,7 +82,36 @@ export const getProfile = async (): Promise<Profile | null> => {
   }
 }
 
-export const getUser = async () => {
+export const getUser = () => {
   const auth = getAuth()
   return auth.currentUser
+}
+
+export const updateProfilePicture = async (uri: string) => {
+  const blob: Blob = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      resolve(xhr.response);
+    };
+    xhr.onerror = function (e) {
+      console.log(e);
+      reject(new TypeError("Network request failed"));
+    };
+    xhr.responseType = "blob";
+    xhr.open("GET", uri, true);
+    xhr.send(null);
+  });
+
+  console.log({ blob })
+
+  const storage = getStorage()
+  const imageRef = ref(storage, `images/${getUser()!.uid}`);
+  await uploadBytes(imageRef, blob)
+
+  blob.close()
+
+  const auth = getAuth()
+  const url = await getDownloadURL(imageRef)
+
+  return await updateProfile(auth.currentUser!, { photoURL: url })
 }
