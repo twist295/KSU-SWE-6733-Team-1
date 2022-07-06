@@ -19,9 +19,9 @@ const styles = StyleSheet.create({
   }
 })
 
-const SegmentControl: FC<Props> = ({ items, onChangeIndex, selectedIndex }) => {
+const SegmentControl: FC<Props> = ({ items, onChangeIndex, selectedIndex, style = {} }) => {
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, ...style }}>
       {items.map((item, index) => {
         const style = index === selectedIndex ? { 
           ...styles.item, 

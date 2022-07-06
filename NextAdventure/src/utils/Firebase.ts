@@ -2,7 +2,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut
 } from 'firebase/auth'
 import {
   addDoc,
@@ -50,6 +51,11 @@ export const signIn = async (email: string, password: string) => {
   await signInWithEmailAndPassword(auth, email, password)
 }
 
+export const signout = async () => {
+  const auth = getAuth()
+  await signOut(auth)
+}
+
 export const setProfile = async (profile: Profile) => {
   const auth = getAuth()
   const db = getFirestore();
@@ -72,4 +78,9 @@ export const getProfile = async (): Promise<Profile | null> => {
   } else {
     return Promise.resolve(null)
   }
+}
+
+export const getUser = async () => {
+  const auth = getAuth()
+  return auth.currentUser
 }

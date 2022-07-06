@@ -1,4 +1,3 @@
-import { getAuth, signOut } from 'firebase/auth';
 import { 
   FC,
   useEffect,
@@ -17,7 +16,9 @@ import { Props } from './ProfileScreen.type'
 import ActivityModal from '../../components/ActivityModal/ActivityModal'
 import {
   getProfile,
-  setProfile
+  getUser,
+  setProfile,
+  signout
 } from '../../utils/Firebase'
 import { Attitude, SkillLevel, getEnumKeys } from '../../utils/Type'
 import type { Activity } from '../../utils/Type'
@@ -28,7 +29,7 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
   const [favoriteActivities, setFavoriteActivites] = useState<Activity[]>([])
   const [isAddingActivity, setIsAddingActivity] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
-  const [editingActivity, setEditingActivity] = useState<Activity | null>(null)
+  const [editingActivity, setEditingActivity] = useState<number>(-1)
 
   useEffect(() => {
     getProfile()
@@ -48,10 +49,15 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({ 
       headerLeft: () => isEditing ? (
-        <Button color="red" title="Cancel" onPress={() => setIsEditing(false)}/>
+        <Button
+          color="red"
+          title="Cancel"
+          onPress={() => setIsEditing(false)}/>
       ) : <></>,
       headerRight: () => isEditing ? (
-        <Button title="Save" onPress={() => save()} />
+        <Button
+          title="Save"
+          onPress={() => save()} />
       ) : (
         <Button title="Edit" onPress={() => setIsEditing(true)}/>
       )
@@ -63,6 +69,13 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
     setIsAddingActivity(false)
   }
 
+  const updateActivity = (activity: Activity) => {
+    const updatedFavoriteActivities = [...favoriteActivities]
+    updatedFavoriteActivities[editingActivity] = activity
+    setFavoriteActivites(updatedFavoriteActivities)
+    setEditingActivity(-1)
+  }
+
   const save = async () => {
     try {
       await setProfile({ firstName, lastName, favoriteActivities })
@@ -72,12 +85,7 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
     }
   }
 
-  const signout = async () => {
-    const auth = getAuth()
-    await signOut(auth)
-  }
-
-  const renderActivity = (activity: Activity) => {
+  const renderActivity = (activity: Activity, index: number) => {
     return (
       <View style={styles.activityCell}>
         <View>
@@ -86,7 +94,9 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
           <Text>{`Attitude: ${getEnumKeys(Attitude)[activity.attitude]}`}</Text>
         </View>
         {isEditing && (
-          <View style={styles.editActivityButton}><Button onPress={() => setEditingActivity(activity)} title="Edit"/></View>
+          <View style={styles.editActivityButton}>
+            <Button onPress={() => setEditingActivity(index)} title="Edit"/>
+          </View>
         )}
       </View>
     )
@@ -121,7 +131,7 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
           ListHeaderComponent={<Text style={styles.header}>Favorite Activities</Text>} 
           ListFooterComponent={isEditing ? (<Button title="Add New" onPress={() => setIsAddingActivity(true)}/>) : null }
           data={favoriteActivities}
-          renderItem={({ item }) => renderActivity(item)} 
+          renderItem={({ item, index }) => renderActivity(item, index)} 
           style={styles.favoriteActivities}/>
       </View>
       <View style={styles.signout}>
@@ -131,6 +141,11 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
         onConfirm={addActivity}
         onDismiss={() => setIsAddingActivity(false)}
         visible={isAddingActivity}/>
+      <ActivityModal
+        activity={editingActivity !== -1 ? favoriteActivities[editingActivity] : null}
+        onConfirm={updateActivity}
+        onDismiss={() => setEditingActivity(-1)}
+        visible={editingActivity != -1}/>
     </View>
   )
 }
@@ -138,7 +153,8 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   activityCell: {
     justifyContent: 'space-between',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginBottom: 8
   },
   activityTitle: {
     fontWeight: 'bold'
