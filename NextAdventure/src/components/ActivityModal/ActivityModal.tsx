@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
 
 const ActivityModal: FC<Props> = ({ onConfirm, onDismiss, visible }) => {
   const [attitude, setAttitude] = useState(Attitude.Like)
+  const [preferences, setPreferences] = useState([] as string[])
   const [skillLevel, setSkillLevel] = useState(SkillLevel.Intermediate)
+  const [type, setType] = useState('')
   
-  console.log({ attitude, skillLevel })
-
   const confirmPressed = () => {
-    onConfirm({ attitude, skillLevel })
+    onConfirm({ attitude, preferences, skillLevel, type })
   }
 
   return (
@@ -44,7 +44,9 @@ const ActivityModal: FC<Props> = ({ onConfirm, onDismiss, visible }) => {
         <View style={styles.container}>
           <TouchableWithoutFeedback>
             <View style={styles.modal}>
-              <TextInput placeholder="Type" />
+              <TextInput
+                onChange={({ nativeEvent }) => setType(nativeEvent.text)}
+                placeholder="Type" />
               <Text>Skill Level</Text>
               <SegmentControl
                 items={getEnumKeys(SkillLevel)}
