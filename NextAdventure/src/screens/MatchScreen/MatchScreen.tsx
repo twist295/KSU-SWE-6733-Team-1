@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react'
 import { 
-  Image, StyleSheet, Text, TouchableOpacity, View 
+  Button, FlatList, Image, StyleSheet, Text, TouchableOpacity, View 
 } from 'react-native'
 import { Directions } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import ActivityCell from '../../components/ActivityCell/ActivityCell'
 import { 
   getPotentialMatches, getUser 
 } from '../../utils/Firebase'
 import type { Profile } from '../../utils/Type'
 
 const styles = StyleSheet.create({
+  header: {
+    fontSize: 24
+  },
   pfp: {
-    height: '75%',
+    height: '50%',
     width: '100%'
   }
 })
@@ -35,16 +39,18 @@ const MatchScreen = () => {
       .catch(console.log)
   }, [])
 
-  useEffect(() => {
-    if (!potentialMatches || !potentialMatches[cursor]) {
-      return
+  const renderActions = (direction: Directions) => {
+    const onPress = (direction: Directions) => {
+      if (direction === Directions.LEFT) {
+        // match
+      } else {
+        // pass
+        setCursor(cursor + 1)
+      }
     }
 
-  }, [cursor, potentialMatches])
-
-  const renderActions = (direction: Directions) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => onPress(direction)}>
         <Text>{direction === Directions.LEFT ? 'MATCH' : 'PASS'}</Text>
       </TouchableOpacity>
     )
@@ -59,10 +65,19 @@ const MatchScreen = () => {
           <Image
             source={{ uri: potentialMatches[cursor].photoURL }}
             style={styles.pfp} />
-          <Text>{potentialMatches[cursor].firstName}</Text>
+          <Text style={styles.header}>{potentialMatches[cursor].firstName}</Text>
           <Text>3000 miles away</Text>
+          <FlatList
+            ListHeaderComponent={<Text style={styles.header}>Favorite Activities</Text>} 
+            data={potentialMatches[cursor].favoriteActivities} 
+            renderItem={({ item }) => <ActivityCell activity={item} />}/>
         </Swipeable>
-      ) : <></> }
+      ) : (
+        <View>
+          <Text>You've swiped through all your suggested matches, please come back later or restart!</Text>
+          <Button onPress={() => setCursor(0)} title="Restart" />
+        </View>
+      ) }
     </View>
   )
 }
