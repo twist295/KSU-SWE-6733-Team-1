@@ -21,7 +21,7 @@ export type Profile = {
   uid?: string
   firstName: string
   lastName: string
-  photoURL: string
+  photoURL?: string
   favoriteActivities: Activity[]
 }
 

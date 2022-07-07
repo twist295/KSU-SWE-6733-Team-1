@@ -59,12 +59,19 @@ export const setProfile = async (profile: Profile) => {
   const auth = getAuth()
   const db = getFirestore();
 
-  return await setDoc(doc(db, 'profiles', auth.currentUser!.uid), {
+  const body: Profile = {
     firstName: profile.firstName,
     lastName: profile.lastName,
-    // location: profile.location
-    favoriteActivities: profile.favoriteActivities
-  })
+    favoriteActivities: profile.favoriteActivities,
+  }
+  
+  if (profile.photoURL) {
+    body.photoURL = profile.photoURL
+  }
+
+  console.log({ profile, step: 'setProfile' })
+  
+  return await setDoc(doc(db, 'profiles', auth.currentUser!.uid), body)
 }
 
 export const getProfile = async (): Promise<Profile | null> => {
@@ -99,18 +106,16 @@ export const updateProfilePicture = async (uri: string) => {
     xhr.send(null);
   });
 
-  console.log({ blob })
-
   const storage = getStorage()
   const imageRef = ref(storage, `images/${getUser()!.uid}`);
   await uploadBytes(imageRef, blob)
 
   blob.close()
 
-  const auth = getAuth()
   const url = await getDownloadURL(imageRef)
+  return url
 
-  return await updateProfile(auth.currentUser!, { photoURL: url })
+  // return await updateProfile(auth.currentUser!, { photoURL: url })
 }
 
 export const getPotentialMatches = async () => {

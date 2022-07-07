@@ -18,11 +18,11 @@ import { Props } from './ProfileScreen.type'
 import ActivityModal from '../../components/ActivityModal/ActivityModal'
 import {
   getProfile,
-  getUser,
   setProfile,
   signout,
   updateProfilePicture
 } from '../../utils/Firebase'
+import type { Profile } from '../../utils/Type'
 import { Attitude, SkillLevel, getEnumKeys } from '../../utils/Type'
 import type { Activity } from '../../utils/Type'
 
@@ -37,24 +37,26 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
   const [hasUpdatedPFP, setHasUpdatedPFP] = useState(false)
 
   useEffect(() => {
-    getProfile()
-      .then(profile => {
-        if (!profile) {
-          setIsEditing(true)
-          return
-        }
-
-        setFirstName(profile.firstName)
-        setLastName(profile.lastName)
-        setFavoriteActivites(profile.favoriteActivities)
-      })
-      .catch(err => console.log(err))
-    
-    const user = getUser()
-    if (!!user) {
-      setPictureUrl(user.photoURL)
-    }
+    refreshProfile()
   }, [])
+
+  const refreshProfile = () => {
+    getProfile()
+    .then(profile => {
+      if (!profile) {
+        setIsEditing(true)
+        return
+      }
+
+      setFirstName(profile.firstName)
+      setLastName(profile.lastName)
+      setFavoriteActivites(profile.favoriteActivities)
+      if (profile.photoURL) {
+        setPictureUrl(profile.photoURL)
+      }
+    })
+    .catch(err => console.log(err))
+  }
 
   useEffect(() => {
     navigation.setOptions({ 
@@ -88,13 +90,20 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
 
   const save = async () => {
     try {
-      await setProfile({ firstName, lastName, favoriteActivities })
-
-      if (hasUpdatedPFP) {
-        const uri = await updateProfilePicture(pictureUrl!)
-        console.log({ uri })
+      let photoURL = pictureUrl
+      if (hasUpdatedPFP && pictureUrl) {
+        photoURL = await updateProfilePicture(pictureUrl)
       }
+
+      const profile: Profile = { firstName, lastName, favoriteActivities }
+      if (photoURL) {
+        profile.photoURL = photoURL
+      }
+
+      await setProfile(profile)
+      refreshProfile()
       setIsEditing(false)
+      setHasUpdatedPFP(false)
     } catch (err) {
       console.log(err)
     }
