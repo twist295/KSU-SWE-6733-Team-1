@@ -126,3 +126,38 @@ export const getPotentialMatches = async () => {
 
   return results
 }
+
+export const saveMatch = async (uid: string) => {
+  const auth = getAuth()
+  const db = getFirestore();
+
+  const matches = await getDoc(doc(db, 'matches', auth.currentUser!.uid))
+  if (matches.exists()) {
+    // matches.data()
+  }
+
+  return await setDoc(doc(db, 'matches', auth.currentUser!.uid), {
+    matches: []
+  })
+
+  // const body: Profile = {
+  //   firstName: profile.firstName,
+  //   lastName: profile.lastName,
+  //   favoriteActivities: profile.favoriteActivities,
+  // }
+  
+  // if (profile.photoURL) {
+  //   body.photoURL = profile.photoURL
+  // }
+  
+  // return await setDoc(doc(db, 'profiles', auth.currentUser!.uid), body)
+}
+
+export const getMatches = () => {
+}
+
+export const getMessages = () => {
+}
+
+export const sendMessage = () => {
+}
