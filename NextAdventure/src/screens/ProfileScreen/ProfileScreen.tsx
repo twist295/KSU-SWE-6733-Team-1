@@ -15,6 +15,7 @@ import {
   View 
 } from 'react-native'
 import { Props } from './ProfileScreen.type'
+import ActivityCell from '../../components/ActivityCell/ActivityCell'
 import ActivityModal from '../../components/ActivityModal/ActivityModal'
 import {
   getProfile,
@@ -23,7 +24,6 @@ import {
   updateProfilePicture
 } from '../../utils/Firebase'
 import type { Profile } from '../../utils/Type'
-import { Attitude, SkillLevel, getEnumKeys } from '../../utils/Type'
 import type { Activity } from '../../utils/Type'
 
 const ProfileScreen: FC<Props> = ({ navigation }) => {
@@ -110,19 +110,14 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
   }
 
   const renderActivity = (activity: Activity, index: number) => {
-    return (
-      <View style={styles.activityCell}>
-        <View>
-          <Text style={styles.activityTitle}>{activity.type}</Text>
-          <Text>{`Skill Level: ${getEnumKeys(SkillLevel)[activity.skillLevel]}`}</Text>
-          <Text>{`Attitude: ${getEnumKeys(Attitude)[activity.attitude]}`}</Text>
-        </View>
-        {isEditing && (
-          <View style={styles.editActivityButton}>
-            <Button onPress={() => setEditingActivity(index)} title="Edit"/>
-          </View>
-        )}
+    const accessory = isEditing ? (
+      <View style={styles.editActivityButton}>
+        <Button onPress={() => setEditingActivity(index)} title="Edit"/>
       </View>
+    ) : null
+
+    return (
+      <ActivityCell activity={activity} accessory={accessory}/>
     )
   }
 
@@ -197,14 +192,6 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-  activityCell: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    marginBottom: 8
-  },
-  activityTitle: {
-    fontWeight: 'bold'
-  },
   container: {
     flex: 1,
     justifyContent: 'space-between',
