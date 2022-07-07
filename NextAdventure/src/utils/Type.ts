@@ -17,6 +17,14 @@ export type Activity = {
   type: string
 }
 
+export type Profile = {
+  uid?: string
+  firstName: string
+  lastName: string
+  photoURL: string
+  favoriteActivities: Activity[]
+}
+
 export const getEnumKeys = (e: { [s: number]: string }) => {
   const keys = []
   for (const k in e) {

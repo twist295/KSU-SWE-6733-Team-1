@@ -4,25 +4,22 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
-  updateProfile
+  updateProfile,
+  User
 } from 'firebase/auth'
 import {
   addDoc,
   collection,
   doc,
   getDoc,
+  getDocs,
   getFirestore,
+  query,
   setDoc,
+  where,
 } from 'firebase/firestore'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
-import type { Activity } from './Type'
-
-type Profile = {
-  firstName: string
-  lastName: string
-  // location: string
-  favoriteActivities: Activity[]
-}
+import type { Profile } from './Type'
 
 /**
  * 
@@ -114,4 +111,33 @@ export const updateProfilePicture = async (uri: string) => {
   const url = await getDownloadURL(imageRef)
 
   return await updateProfile(auth.currentUser!, { photoURL: url })
+}
+
+export const getPotentialMatches = async () => {
+  const db = getFirestore();
+
+  const q = query(collection(db, 'profiles'))
+  const querySnapshot = await getDocs(q);
+  type Results = { [key: string]: Profile }
+  const results = <Results>{}
+  querySnapshot.forEach((doc) => {
+    results[doc.id] = doc.data() as Profile
+  })
+
+  return results
+}
+
+export const getOtherUser = async (uid: string) => {
+  const db = getFirestore();
+  const q = query(collection(db, 'users'), where('uid', '==', uid))
+  
+  const querySnapshot = await getDocs(q);
+  type Results = { [key: string]: User }
+  const results = <Results>{}
+  querySnapshot.forEach((doc) => {
+    results[doc.id] = doc.data() as User
+    results[doc.id] = { ...results[doc.id] }
+  })
+  
+  return results[Object.keys(results)[0]]
 }
