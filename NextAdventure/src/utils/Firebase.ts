@@ -4,7 +4,6 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
-  updateProfile,
   User
 } from 'firebase/auth'
 import {
@@ -68,8 +67,6 @@ export const setProfile = async (profile: Profile) => {
   if (profile.photoURL) {
     body.photoURL = profile.photoURL
   }
-
-  console.log({ profile, step: 'setProfile' })
   
   return await setDoc(doc(db, 'profiles', auth.currentUser!.uid), body)
 }
@@ -114,8 +111,6 @@ export const updateProfilePicture = async (uri: string) => {
 
   const url = await getDownloadURL(imageRef)
   return url
-
-  // return await updateProfile(auth.currentUser!, { photoURL: url })
 }
 
 export const getPotentialMatches = async () => {
@@ -130,19 +125,4 @@ export const getPotentialMatches = async () => {
   })
 
   return results
-}
-
-export const getOtherUser = async (uid: string) => {
-  const db = getFirestore();
-  const q = query(collection(db, 'users'), where('uid', '==', uid))
-  
-  const querySnapshot = await getDocs(q);
-  type Results = { [key: string]: User }
-  const results = <Results>{}
-  querySnapshot.forEach((doc) => {
-    results[doc.id] = doc.data() as User
-    results[doc.id] = { ...results[doc.id] }
-  })
-  
-  return results[Object.keys(results)[0]]
 }
