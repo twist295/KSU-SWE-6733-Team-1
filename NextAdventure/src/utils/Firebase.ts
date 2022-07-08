@@ -17,7 +17,9 @@ import {
   setDoc,
   where,
 } from 'firebase/firestore'
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
+import { 
+  getDownloadURL, getStorage, ref, uploadBytes 
+} from 'firebase/storage'
 import type { Profile } from './Type'
 
 /**
@@ -129,31 +131,47 @@ export const getPotentialMatches = async () => {
 
 export const saveMatch = async (uid: string) => {
   const auth = getAuth()
-  const db = getFirestore();
+  const db = getFirestore()
 
-  const matches = await getDoc(doc(db, 'matches', auth.currentUser!.uid))
-  if (matches.exists()) {
-    // matches.data()
+  const existingMatches = await getDoc(doc(db, 'matches', auth.currentUser!.uid))
+  let matches: string[]
+  if (existingMatches.exists()) {
+    matches = existingMatches.data().matches
+    matches.push(uid)
+  } else {
+    matches = [uid]
   }
 
-  return await setDoc(doc(db, 'matches', auth.currentUser!.uid), {
-    matches: []
-  })
-
-  // const body: Profile = {
-  //   firstName: profile.firstName,
-  //   lastName: profile.lastName,
-  //   favoriteActivities: profile.favoriteActivities,
-  // }
-  
-  // if (profile.photoURL) {
-  //   body.photoURL = profile.photoURL
-  // }
-  
-  // return await setDoc(doc(db, 'profiles', auth.currentUser!.uid), body)
+  return await setDoc(doc(db, 'matches', auth.currentUser!.uid), { matches })
 }
 
-export const getMatches = () => {
+export const getMatches = async () => {
+  const auth = getAuth()
+  const db = getFirestore()
+
+  if (!auth.currentUser) {
+    return []
+  }
+
+  const q = query(collection(db, 'matches'))
+  const querySnapshot = await getDocs(q)
+
+  type Matches = {
+    matches: string[]
+  }
+
+  type Results = { [key: string]: string[] }
+  const results = <Results>{}
+  
+  querySnapshot.forEach((doc) => {
+    const { matches } = doc.data() as Matches
+    results[doc.id] = matches
+  })
+
+  // find all mutual matches for the current user  
+  return results[auth.currentUser!.uid].filter(uid => {
+    return results[uid] && results[uid].includes(auth.currentUser!.uid)
+  })
 }
 
 export const getMessages = () => {
