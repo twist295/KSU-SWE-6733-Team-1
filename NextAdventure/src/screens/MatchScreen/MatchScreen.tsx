@@ -6,7 +6,7 @@ import { Directions } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import ActivityCell from '../../components/ActivityCell/ActivityCell'
 import { 
-  getPotentialMatches, getUser 
+  getProfiles, getUser, saveMatch
 } from '../../utils/Firebase'
 import type { Profile } from '../../utils/Type'
 
@@ -25,7 +25,7 @@ const MatchScreen = () => {
   const [cursor, setCursor] = useState(0)
 
   useEffect(() => {
-    getPotentialMatches()
+    getProfiles()
       .then((profiles) => {
         const currentUserUid = getUser()!.uid
 
@@ -43,10 +43,12 @@ const MatchScreen = () => {
     const onPress = (direction: Directions) => {
       if (direction === Directions.LEFT) {
         // match
+        saveMatch(potentialMatches[cursor].uid!)
       } else {
         // pass
-        setCursor(cursor + 1)
       }
+
+      setCursor(cursor + 1)
     }
 
     return (
