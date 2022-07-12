@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore"
+
 export enum Attitude {
   Okay = 0,
   Like = 1,
@@ -17,6 +19,13 @@ export type Activity = {
   type: string
 }
 
+export type Message = {
+  body: string
+  sender: string
+  recipient: string
+  timestamp: Timestamp
+}
+
 export type Profile = {
   uid?: string
   firstName: string
@@ -25,6 +34,10 @@ export type Profile = {
   favoriteActivities: Activity[]
 }
 
+/**
+ * 
+ * @param e 
+ */
 export const getEnumKeys = (e: { [s: number]: string }) => {
   const keys = []
   for (const k in e) {

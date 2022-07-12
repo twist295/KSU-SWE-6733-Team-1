@@ -4,7 +4,6 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
-  User
 } from 'firebase/auth'
 import {
   addDoc,
@@ -15,12 +14,18 @@ import {
   getFirestore,
   query,
   setDoc,
+  Timestamp,
   where,
 } from 'firebase/firestore'
 import { 
-  getDownloadURL, getStorage, ref, uploadBytes 
+  getDownloadURL, 
+  getStorage, 
+  ref, 
+  uploadBytes 
 } from 'firebase/storage'
-import type { Profile } from './Type'
+import type { Message, Profile } from './Type'
+
+export type ProfilesResults = { [key: string]: Profile }
 
 /**
  * 
@@ -36,6 +41,10 @@ export const createUser = async (email: string, password: string) => {
   })
 }
 
+/**
+ * 
+ * @param email 
+ */
 export const sendPWResetEmail = async (email: string) => {
   const auth = getAuth()
   await sendPasswordResetEmail(auth, email)
@@ -56,6 +65,10 @@ export const signout = async () => {
   await signOut(auth)
 }
 
+/**
+ * 
+ * @param profile 
+ */
 export const setProfile = async (profile: Profile) => {
   const auth = getAuth()
   const db = getFirestore();
@@ -90,6 +103,10 @@ export const getUser = () => {
   return auth.currentUser
 }
 
+/**
+ * 
+ * @param uri 
+ */
 export const updateProfilePicture = async (uri: string) => {
   const blob: Blob = await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -115,20 +132,26 @@ export const updateProfilePicture = async (uri: string) => {
   return url
 }
 
-export const getPotentialMatches = async () => {
+export const getProfiles = async (): Promise<ProfilesResults> => {
   const db = getFirestore();
 
   const q = query(collection(db, 'profiles'))
   const querySnapshot = await getDocs(q);
-  type Results = { [key: string]: Profile }
-  const results = <Results>{}
+  const results = <ProfilesResults>{}
   querySnapshot.forEach((doc) => {
-    results[doc.id] = doc.data() as Profile
+    results[doc.id] = { 
+      ...doc.data() as Profile, 
+      uid: doc.id 
+    }
   })
 
-  return results
+  return Promise.resolve(results)
 }
 
+/**
+ * 
+ * @param uid 
+ */
 export const saveMatch = async (uid: string) => {
   const auth = getAuth()
   const db = getFirestore()
@@ -145,7 +168,7 @@ export const saveMatch = async (uid: string) => {
   return await setDoc(doc(db, 'matches', auth.currentUser!.uid), { matches })
 }
 
-export const getMatches = async () => {
+export const getMatches = async (): Promise<string[]> => {
   const auth = getAuth()
   const db = getFirestore()
 
@@ -174,8 +197,55 @@ export const getMatches = async () => {
   })
 }
 
-export const getMessages = () => {
+/**
+ * 
+ * @param uid 
+ */
+export const getMessages = async (uid: string) => {
+  const auth = getAuth()
+  const db = getFirestore()
+
+  const ref = collection(db, 'messages')
+
+  // get the messages sent by the current user to the target user
+  const senderQ = query(ref, where('sender', '==', auth.currentUser!.uid), where('recipient', '==', uid))
+  const senderQSnapshot = await getDocs(senderQ)
+
+  const messages: Message[] = []
+
+  senderQSnapshot.forEach((doc) => {
+    const message = doc.data() as Message
+    messages.push(message)
+  })
+
+  const recipientQ = query(ref, where('sender', '==', uid), where('recipient', '==', auth.currentUser!.uid))
+  const recipientQSnapshot = await getDocs(recipientQ)
+
+  recipientQSnapshot.forEach((doc) => {
+    const message = doc.data() as Message
+    messages.push(message)
+  })
+
+  // sort messages by timestamp
+  messages.sort((a, b) => a.timestamp > b.timestamp ? 1 : -1)
+
+  return messages
 }
 
-export const sendMessage = () => {
+/**
+ * 
+ * @param uid 
+ * @param message 
+ */
+export const sendMessage = async (uid: string, body: string) => {
+  const auth = getAuth()
+  const db = getFirestore()
+
+  const timestamp = Timestamp.fromDate(new Date(Date.now()))
+  return await addDoc(collection(db, 'messages'), {
+    sender: auth.currentUser!.uid,
+    recipient: uid,
+    timestamp,
+    body
+  })
 }

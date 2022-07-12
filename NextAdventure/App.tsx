@@ -7,8 +7,11 @@ import {
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { StackParamList, TabParamList } from './App.type'
+import { 
+  SocialStackParamList, StackParamList, TabParamList 
+} from './App.type'
 import AuthScreen from './src/screens/AuthScreen/AuthScreen'
+import ChatScreen from './src/screens/ChatScreen/ChatScreen'
 import InboxScreen from './src/screens/InboxScreen/InboxScreen'
 import MatchScreen from './src/screens/MatchScreen/MatchScreen'
 import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen'
@@ -16,6 +19,7 @@ import SignupScreen from './src/screens/SignupScreen/SignupScreen'
 
 const Tab = createBottomTabNavigator<TabParamList>()
 const Stack = createNativeStackNavigator<StackParamList>()
+const SocialStack = createNativeStackNavigator<SocialStackParamList>()
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
@@ -37,11 +41,18 @@ export default function App() {
     })
   }, [])
 
+  const SocialStackScreen = () => (
+    <SocialStack.Navigator>
+      <SocialStack.Screen name="Inbox" component={InboxScreen} />
+      <SocialStack.Screen name="Chat" component={ChatScreen} />
+    </SocialStack.Navigator>
+  )
+
   return (
     <NavigationContainer>
       {signedIn ? (
-        <Tab.Navigator>
-          <Tab.Screen name="Inbox" component={InboxScreen} />
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
+          <Tab.Screen name="Social" component={SocialStackScreen}  />
           <Tab.Screen name="Match" component={MatchScreen} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>
