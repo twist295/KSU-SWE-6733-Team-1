@@ -41,8 +41,6 @@ const InboxScreen = ({ navigation }: Props) => {
       .catch(console.log)
   }, [])
 
-  console.log({ matches })
-
   const renderProfile = (profile: Profile) => {
     return (
       <TouchableOpacity
