@@ -11,7 +11,7 @@ import {
   View
 } from 'react-native'
 import { Props } from './ChatScreen.type'
-import { getMessages, sendMessage } from '../../utils/Firebase'
+import { getMessages, getUser, sendMessage } from '../../utils/Firebase'
 import { Message } from '../../utils/Type'
 
 const styles = StyleSheet.create({
@@ -21,9 +21,20 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: 'white',
-    flex: 1
+    flex: 1,
+    padding: 8
   },
   fromSelf: {
+    alignSelf: 'flex-end',
+    backgroundColor: 'blue',
+    borderRadius: 4,
+    marginBottom: 8,
+    paddingHorizontal: 4,
+    paddingVertical: 8,
+    width: '66%'
+  },
+  fromSelfText: {
+    color: 'white'
   },
   input: {
     backgroundColor: 'white',
@@ -32,6 +43,14 @@ const styles = StyleSheet.create({
     margin: 8
   },
   toSelf: {
+    backgroundColor: 'gray',
+    borderRadius: 4,
+    marginBottom: 8,
+    paddingHorizontal: 4,
+    paddingVertical: 8,
+    width: '66%'
+  },
+  toSelfText: {
   }
 })
 
@@ -62,8 +81,10 @@ const ChatScreen = ({ navigation, route }: Props) => {
 
   const renderMessage = (message: Message) => {
     return (
-      <View>
-        <Text>{message.body}</Text>
+      <View style={message.sender === getUser()!.uid ? styles.fromSelf : styles.toSelf}>
+        <Text style={message.sender === getUser()!.uid ? styles.fromSelfText : styles.toSelf}>
+          {message.body}
+        </Text>
       </View>
     )
   }
