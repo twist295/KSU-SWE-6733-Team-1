@@ -8,7 +8,8 @@ workflows:
         script: cd NextAdventure && yarn test
     triggering:
       events:
-      - pull_request
+        - push
+        - pull_request
       branch_patterns:
-      - pattern: master
+        - pattern: '*'
       cancel_previous_builds: true
