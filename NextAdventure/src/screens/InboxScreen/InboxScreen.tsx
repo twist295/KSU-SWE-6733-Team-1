@@ -8,8 +8,12 @@ import {
   View 
 } from 'react-native'
 import { Props } from './InboxScreen.type'
-import { getMatches, getProfiles } from '../../utils/Firebase'
-import type { Profile } from '../../utils/Type'
+import {
+  getLatestMessageForThreads,
+  getMatches,
+  getProfiles
+} from '../../utils/Firebase'
+import type { Message, Profile } from '../../utils/Type'
 
 const styles = StyleSheet.create({
   cell: {
@@ -25,6 +29,7 @@ const styles = StyleSheet.create({
 
 const InboxScreen = ({ navigation }: Props) => {
   const [matches, setMatches] = useState<Profile[]>([])
+  const [latestMessages, setLatestMessages] = useState<{ [key: string]: Message | null }>({})
 
   useEffect(() => {
     Promise.all([getMatches(), getProfiles()])
@@ -37,6 +42,10 @@ const InboxScreen = ({ navigation }: Props) => {
         })
 
         setMatches(mutualMatchProfiles)
+
+        getLatestMessageForThreads(mutualMatchProfiles.map((match) => match.uid!))
+          .then(setLatestMessages)
+          .catch(console.log)
       })
       .catch(console.log)
   }, [])
@@ -49,8 +58,8 @@ const InboxScreen = ({ navigation }: Props) => {
         <Image source={{ uri: profile.photoURL }} style={styles.pfp} />
         <View>
           <Text>{profile.firstName}</Text>
-          <Text>MESSAGE BODY</Text>
-          <Text>TIMESTAMP</Text>
+          <Text>{latestMessages[profile.uid!]?.body}</Text>
+          <Text>{latestMessages[profile.uid!]?.timestamp.toString()}</Text>
         </View>
       </TouchableOpacity>
     )

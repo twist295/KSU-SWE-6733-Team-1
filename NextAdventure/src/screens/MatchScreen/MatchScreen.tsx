@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { 
-  Button, FlatList, Image, StyleSheet, Text, TouchableOpacity, View 
+  Button,
+  FlatList,
+  Image,
+  StyleSheet, Text, TouchableOpacity, View 
 } from 'react-native'
 import { Directions } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';

@@ -230,6 +230,7 @@ export const getLatestMessageForThreads = async (uids: string[]) => {
 
     if (senderQSnapshot.size === 0 && recipientQSnapshot.size === 0) {
       // no messages have been sent yet
+
       results[uid] = null
     } else if (!!senderQSnapshot.docs[0] && recipientQSnapshot.size === 0) {
       // only has a message from current user
@@ -242,8 +243,12 @@ export const getLatestMessageForThreads = async (uids: string[]) => {
       const inboundMessage = recipientQSnapshot.docs[0].data() as Message
 
       results[uid] = outboundMessage.timestamp > inboundMessage.timestamp ? outboundMessage : inboundMessage
+      console.log({ results })
+
     }
   }))
+
+  return results
 }
 
 /**
