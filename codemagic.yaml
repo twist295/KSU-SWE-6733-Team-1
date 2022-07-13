@@ -3,6 +3,6 @@ workflows:
     name: CI workflow
     scripts:
       - name: Install dependencies
-        script: yarn ci
+        script: cd NextAdventure && yarn ci
       - name: Tests
         script: yarn test
