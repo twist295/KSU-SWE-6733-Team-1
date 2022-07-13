@@ -1,6 +1,0 @@
-workflows:
-  ci:
-    name: CI Workflow
-    scripts:
-      - name: Tests
-        script: npm test
