@@ -5,4 +5,4 @@ workflows:
       - name: Install dependencies
         script: cd NextAdventure && yarn
       - name: Tests
-        script: yarn test
+        script: cd NextAdventure && yarn test
