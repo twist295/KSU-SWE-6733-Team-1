@@ -1,0 +1,6 @@
+workflows:
+  ci:
+    name: CI workflow
+    scripts:
+      - name: Tests
+        script: yarn test
