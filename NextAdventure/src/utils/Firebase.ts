@@ -12,6 +12,8 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  limit,
+  orderBy,
   query,
   setDoc,
   Timestamp,
@@ -23,7 +25,9 @@ import {
   ref, 
   uploadBytes 
 } from 'firebase/storage'
-import type { Message, Profile } from './Type'
+import type { 
+  Message,
+  Profile } from './Type'
 
 export type ProfilesResults = { [key: string]: Profile }
 
@@ -197,6 +201,56 @@ export const getMatches = async (): Promise<string[]> => {
   })
 }
 
+export const getLatestMessageForThreads = async (uids: string[]) => {
+  const auth = getAuth()
+  const db = getFirestore()
+  const ref = collection(db, 'messages')
+
+  type Results = { [key: string]: Message | null }
+  const results = <Results>{}
+
+  uids.forEach((async uid => {
+    // get latest message from current user
+    const senderQ = query(ref, 
+      where('sender', '==', auth.currentUser!.uid), 
+      where('recipient', '==', uid), 
+      orderBy('timestamp'), 
+      limit(1)
+    )
+    const senderQSnapshot = await getDocs(senderQ)
+    
+    // get latest message sent to current user
+    const recipientQ = query(ref,
+      where('sender', '==', uid),
+      where('recipient', '==', auth.currentUser!.uid),
+      orderBy('timestamp'),
+      limit(1)
+    )
+    const recipientQSnapshot = await getDocs(recipientQ)
+
+    if (senderQSnapshot.size === 0 && recipientQSnapshot.size === 0) {
+      // no messages have been sent yet
+
+      results[uid] = null
+    } else if (!!senderQSnapshot.docs[0] && recipientQSnapshot.size === 0) {
+      // only has a message from current user
+      results[uid] = senderQSnapshot.docs[0].data() as Message
+    } else if (senderQSnapshot.size === 0 && !!recipientQSnapshot.docs[0]) {
+      // only has a message to current user
+      results[uid] = recipientQSnapshot.docs[0].data() as Message
+    } else {
+      const outboundMessage = senderQSnapshot.docs[0].data() as Message
+      const inboundMessage = recipientQSnapshot.docs[0].data() as Message
+
+      results[uid] = outboundMessage.timestamp > inboundMessage.timestamp ? outboundMessage : inboundMessage
+      console.log({ results })
+
+    }
+  }))
+
+  return results
+}
+
 /**
  * 
  * @param uid 
@@ -208,7 +262,10 @@ export const getMessages = async (uid: string) => {
   const ref = collection(db, 'messages')
 
   // get the messages sent by the current user to the target user
-  const senderQ = query(ref, where('sender', '==', auth.currentUser!.uid), where('recipient', '==', uid))
+  const senderQ = query(ref,
+    where('sender', '==', auth.currentUser!.uid),
+    where('recipient', '==', uid)
+  )
   const senderQSnapshot = await getDocs(senderQ)
 
   const messages: Message[] = []
@@ -218,7 +275,9 @@ export const getMessages = async (uid: string) => {
     messages.push(message)
   })
 
-  const recipientQ = query(ref, where('sender', '==', uid), where('recipient', '==', auth.currentUser!.uid))
+  const recipientQ = query(ref,
+    where('sender', '==', uid),
+    where('recipient', '==', auth.currentUser!.uid))
   const recipientQSnapshot = await getDocs(recipientQ)
 
   recipientQSnapshot.forEach((doc) => {

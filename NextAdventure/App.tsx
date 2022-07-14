@@ -8,7 +8,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { 
-  SocialStackParamList, StackParamList, TabParamList 
+  MatchStackParamList,
+  ProfileStackParamList,
+  SocialStackParamList, 
+  StackParamList,
+  TabParamList
 } from './App.type'
 import AuthScreen from './src/screens/AuthScreen/AuthScreen'
 import ChatScreen from './src/screens/ChatScreen/ChatScreen'
@@ -17,6 +21,8 @@ import MatchScreen from './src/screens/MatchScreen/MatchScreen'
 import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen'
 import SignupScreen from './src/screens/SignupScreen/SignupScreen'
 
+const MatchStack = createNativeStackNavigator<MatchStackParamList>()
+const ProfileStack = createNativeStackNavigator<ProfileStackParamList>()
 const Tab = createBottomTabNavigator<TabParamList>()
 const Stack = createNativeStackNavigator<StackParamList>()
 const SocialStack = createNativeStackNavigator<SocialStackParamList>()
@@ -48,13 +54,25 @@ export default function App() {
     </SocialStack.Navigator>
   )
 
+  const MatchStackScreen = () => (
+    <MatchStack.Navigator>
+      <MatchStack.Screen name="Match" component={MatchScreen}/>
+    </MatchStack.Navigator>
+  )
+
+  const ProfileStackScreen = () => (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    </ProfileStack.Navigator>
+  )
+
   return (
     <NavigationContainer>
       {signedIn ? (
         <Tab.Navigator screenOptions={{ headerShown: false }}>
           <Tab.Screen name="Social" component={SocialStackScreen}  />
-          <Tab.Screen name="Match" component={MatchScreen} />
-          <Tab.Screen name="Profile" component={ProfileScreen} />
+          <Tab.Screen name="Match" component={MatchStackScreen} />
+          <Tab.Screen name="Profile" component={ProfileStackScreen} />
         </Tab.Navigator>
       ) : (
         <Stack.Navigator>

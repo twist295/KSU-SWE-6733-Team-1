@@ -1,0 +1,15 @@
+workflows:
+  ci:
+    name: CI workflow
+    scripts:
+      - name: Install dependencies
+        script: cd NextAdventure && yarn
+      - name: Tests
+        script: cd NextAdventure && yarn test
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: '*'
+      cancel_previous_builds: true
