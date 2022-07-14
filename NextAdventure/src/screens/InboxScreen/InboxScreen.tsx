@@ -54,7 +54,8 @@ const InboxScreen = ({ navigation }: Props) => {
     return (
       <TouchableOpacity
         onPress={() => navigation.push('Chat', { profile })} 
-        style={styles.cell}>
+        style={styles.cell}
+        testID="chat-cell">
         <Image source={{ uri: profile.photoURL }} style={styles.pfp} />
         <View>
           <Text>{profile.firstName}</Text>
