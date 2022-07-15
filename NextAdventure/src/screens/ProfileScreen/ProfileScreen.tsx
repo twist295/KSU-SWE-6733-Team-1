@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     width: 88
   },
   favoriteActivities: {
-    marginTop: 16
+    marginTop: 16,
   },
   header: {
     fontSize: 24

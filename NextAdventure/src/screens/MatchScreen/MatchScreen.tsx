@@ -1,3 +1,4 @@
+import { types } from '@babel/core';
 import { useEffect, useState } from 'react'
 import { 
   Button,
@@ -18,6 +19,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: 'Anton',
     marginTop: 10,
+    marginLeft: 5,
+    marginBottom: 5,
+    color: '#333333'
 
   },
  
@@ -28,22 +32,25 @@ const styles = StyleSheet.create({
 
   name: {
     fontSize: 30,
-    fontFamily: 'Anton',
+    fontFamily: 'Prata',
     textAlign: 'center',
     marginTop: 10,
+    color: '#333333'
 
   },
 
   distance: {
     fontSize: 15,
     fontFamily: 'Ubuntu',
-  },
+    marginLeft: 5,
+    },
 
   txt: {
     marginTop: 250,
     fontSize: 15,
     fontFamily: 'Ubuntu',
     textAlign: 'center',
+    color: '#ff0099'
   },
 
   container: {
@@ -52,10 +59,17 @@ const styles = StyleSheet.create({
     
   },
 
-  passOrMath: {
+  passOrMatch: {
     fontFamily: 'Monoton',
-    color: 'blue'
+    color: '#0000cc',
+    marginTop: 15
+  },
+
+  items: {
+    marginLeft: 5,
   }
+
+  
   
   
 })
@@ -93,7 +107,7 @@ const MatchScreen = () => {
 
     return (
       <TouchableOpacity onPress={() => onPress(direction)}>
-        <Text style={styles.passOrMath}>{direction === Directions.LEFT ? 'MATCH' : 'PASS'}</Text>
+        <Text style={styles.passOrMatch}>{direction === Directions.LEFT ? 'MATCH' : 'PASS'}</Text>
       </TouchableOpacity>
     )
   }
@@ -111,10 +125,13 @@ const MatchScreen = () => {
           <Text style={styles.name}>{potentialMatches[cursor].firstName}</Text>
           <Text style={styles.distance}>3000 miles away</Text>
           <FlatList
-            ListHeaderComponent={<Text style={styles.header}>Favorite Activities</Text>} 
-            data={potentialMatches[cursor].favoriteActivities} 
-            renderItem={({ item }) => <ActivityCell activity={item} />}/>
-            
+            ListHeaderComponent={<Text style={styles.header}>Favorite Activities</Text>}
+            data={ potentialMatches[cursor].favoriteActivities}
+            // renderItem={({ item }) => <ActivityCell activity={item} />}/>
+            renderItem={({ item }) => (<Text style={styles.items}>{<ActivityCell activity={item}/>}</Text>)}
+            />
+
+                 
         </Swipeable>
       ) : (
         <View>
