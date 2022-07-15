@@ -15,12 +15,49 @@ import type { Profile } from '../../utils/Type'
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 24
+    fontSize: 30,
+    fontFamily: 'Ubuntu',
+    marginTop: 10,
+
   },
+ 
   pfp: {
     height: '50%',
-    width: '100%'
+    width: '100%',
+  },
+
+  name: {
+    fontSize: 30,
+    fontFamily: 'Ubuntu',
+    textAlign: 'center',
+    marginTop: 10,
+
+  },
+
+  distance: {
+    fontSize: 15,
+    fontFamily: 'Ubuntu',
+  },
+
+  txt: {
+    marginTop: 250,
+    fontSize: 15,
+    fontFamily: 'Ubuntu',
+    textAlign: 'center',
+  },
+
+  container: {
+    flex: 1,
+    backgroundColor: 'lightblue',
+    
+  },
+
+  passOrMath: {
+    fontFamily: 'Monoton',
+    color: 'red'
   }
+  
+  
 })
 
 const MatchScreen = () => {
@@ -56,13 +93,14 @@ const MatchScreen = () => {
 
     return (
       <TouchableOpacity onPress={() => onPress(direction)}>
-        <Text>{direction === Directions.LEFT ? 'MATCH' : 'PASS'}</Text>
+        <Text style={styles.passOrMath}>{direction === Directions.LEFT ? 'MATCH' : 'PASS'}</Text>
       </TouchableOpacity>
     )
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    //<View style={{ flex: 1 }}>
+      <View style={styles.container}>
       {potentialMatches[cursor] ? (
         <Swipeable
           renderLeftActions={() => renderActions(Directions.LEFT)}
@@ -70,16 +108,17 @@ const MatchScreen = () => {
           <Image
             source={{ uri: potentialMatches[cursor].photoURL }}
             style={styles.pfp} />
-          <Text style={styles.header}>{potentialMatches[cursor].firstName}</Text>
-          <Text>3000 miles away</Text>
+          <Text style={styles.name}>{potentialMatches[cursor].firstName}</Text>
+          <Text style={styles.distance}>3000 miles away</Text>
           <FlatList
             ListHeaderComponent={<Text style={styles.header}>Favorite Activities</Text>} 
             data={potentialMatches[cursor].favoriteActivities} 
             renderItem={({ item }) => <ActivityCell activity={item} />}/>
+            
         </Swipeable>
       ) : (
         <View>
-          <Text>You've swiped through all your suggested matches, please come back later or restart!</Text>
+          <Text style={styles.txt}>You've swiped through all your suggested matches, please come back later or restart!</Text>
           <Button onPress={() => setCursor(0)} title="Restart" />
         </View>
       ) }

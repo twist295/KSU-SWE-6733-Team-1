@@ -14,30 +14,25 @@ import {
 } from 'react-native'
 import { Props } from './AuthScreen.type'
 import { sendPWResetEmail, signIn } from '../../utils/Firebase'
-
 import { useFonts } from 'expo-font'
 import AppLoading from 'expo-app-loading'
-
 
 const AuthScreen: FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isResettingPW, setIsResettingPW] = useState(false)
 
-
-  
   let [ fontsLoaded ] = useFonts({
     'Monoton': require('../AuthScreen/assets/fonts/Monoton-Regular.ttf'),
     'ComingSoon': require('../AuthScreen/assets/fonts/ComingSoon-Regular.ttf'),
     'Dancing': require('../AuthScreen/assets/fonts/DancingScript-Regular.ttf'),
-    'Ubuntu': require('../AuthScreen/assets/fonts/Ubuntu-Regular.ttf')
+    'Ubuntu': require('../AuthScreen/assets/fonts/Ubuntu-Regular.ttf'),
+    'DancingBold': require('../AuthScreen/assets/fonts/DancingScript-Bold.ttf')
   })
   if(!fontsLoaded){
     return <AppLoading/>
   }
   
-
-
   const onLogin = async () => {
     try {
       signIn(email, password)
@@ -54,10 +49,6 @@ const AuthScreen: FC<Props> = ({ navigation }) => {
     }
   }
 
-  
-  
-
-
   return (
     <View style = {styles.container}>
       
@@ -68,7 +59,6 @@ const AuthScreen: FC<Props> = ({ navigation }) => {
       <Text style = {styles.baseText}>Venture
       <Text style = {styles.innerText}>Match</Text>
       </Text>
-
       <Text style = {styles.smallText}>let's choose your match!</Text>
       
       <TextInput style = {styles.email_input}
@@ -114,37 +104,28 @@ const AuthScreen: FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //backgroundColor: '#fdfbf4'
     backgroundColor: '#fbf9ed'
   },
 
   image: {
-    //justifyContent: 'center',
     marginHorizontal: 60,
     marginVertical: 30,
   },
 
   baseText: {
     fontFamily: 'Monoton',
-    //marginTop: 20,
     textAlign: 'center',
-    //fontWeight: 'bold',
     fontSize: 30,
     color: '#004488',
     backgroundColor: '#fdfbf4',
-    //padding: 5,
-    
-
   },
 
   innerText: {
-    //marginTop: 5,
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 30,
     color: '#EE3377',
     backgroundColor: '#fdfbf4',
-    //padding: 5,
   },
 
   smallText: {
@@ -153,9 +134,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#c00000',
     backgroundColor: '#fdfbf4',
-    //padding: 5,
     fontFamily: 'Ubuntu',
-
   },
   
   email_input: {
@@ -167,6 +146,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6
   },
+
   password_input: {
     marginTop: 10,
     marginLeft: 20,
@@ -176,16 +156,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6
   },
+
   forgot_passowrd: {
     marginTop: 5,
-    //marginLeft: 230,
-    //marginRight: 10,
-    //borderRadius: 2,
-    //borderWidth: 0.5,
-    //backgroundColor: '#c4dfe6',
     textAlign: 'center',
-    fontFamily: 'ComingSoon'
-    
+    fontFamily: 'ComingSoon' 
   }
 
 })
