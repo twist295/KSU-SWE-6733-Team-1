@@ -27,7 +27,9 @@ const AuthScreen: FC<Props> = ({ navigation }) => {
     'ComingSoon': require('../AuthScreen/assets/fonts/ComingSoon-Regular.ttf'),
     'Dancing': require('../AuthScreen/assets/fonts/DancingScript-Regular.ttf'),
     'Ubuntu': require('../AuthScreen/assets/fonts/Ubuntu-Regular.ttf'),
-    'DancingBold': require('../AuthScreen/assets/fonts/DancingScript-Bold.ttf')
+    'DancingBold': require('../AuthScreen/assets/fonts/DancingScript-Bold.ttf'),
+    'Anton': require('../AuthScreen/assets/fonts/Anton-Regular.ttf'),
+    'Prata': require('../AuthScreen/assets/fonts/Prata-Regular.ttf')
   })
   if(!fontsLoaded){
     return <AppLoading/>

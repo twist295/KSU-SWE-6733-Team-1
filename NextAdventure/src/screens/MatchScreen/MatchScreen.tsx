@@ -15,8 +15,8 @@ import type { Profile } from '../../utils/Type'
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 30,
-    fontFamily: 'Ubuntu',
+    fontSize: 24,
+    fontFamily: 'Anton',
     marginTop: 10,
 
   },
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 
   name: {
     fontSize: 30,
-    fontFamily: 'Ubuntu',
+    fontFamily: 'Anton',
     textAlign: 'center',
     marginTop: 10,
 
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
 
   passOrMath: {
     fontFamily: 'Monoton',
-    color: 'red'
+    color: 'blue'
   }
   
   
