@@ -17,8 +17,7 @@ import type { Profile } from '../../utils/Type'
 const styles = StyleSheet.create({
   header: {
     fontSize: 24,
-    fontFamily: 'Anton',
-    marginTop: 10,
+    fontFamily: 'Cormorant',
     marginLeft: 5,
     marginBottom: 5,
     color: '#333333'
@@ -42,31 +41,37 @@ const styles = StyleSheet.create({
   distance: {
     fontSize: 15,
     fontFamily: 'Ubuntu',
-    marginLeft: 5,
+    marginLeft: 10,
     },
 
   txt: {
-    marginTop: 250,
-    fontSize: 15,
-    fontFamily: 'Ubuntu',
+    marginTop: 220,
+    marginBottom: 30,
+    marginLeft: 20,
+    marginRight: 20,
+    fontSize: 25,
+    //fontFamily: 'Ubuntu',
+    fontFamily: 'DancingBold',
     textAlign: 'center',
     color: '#ff0099'
   },
 
   container: {
     flex: 1,
-    backgroundColor: 'lightblue',
+    backgroundColor: '#ccffff',
     
   },
 
   passOrMatch: {
+    marginLeft:10,
+    marginRight: 10,
     fontFamily: 'Monoton',
-    color: '#0000cc',
+    color: '#0000ff',
     marginTop: 15
   },
 
   items: {
-    marginLeft: 5,
+    marginLeft: 15,
   }
 
   
@@ -123,9 +128,9 @@ const MatchScreen = () => {
             source={{ uri: potentialMatches[cursor].photoURL }}
             style={styles.pfp} />
           <Text style={styles.name}>{potentialMatches[cursor].firstName}</Text>
-          <Text style={styles.distance}>3000 miles away</Text>
+          <Text style={styles.distance}>📍3000 miles away</Text>
           <FlatList
-            ListHeaderComponent={<Text style={styles.header}>Favorite Activities</Text>}
+            ListHeaderComponent={<Text style={styles.header}>✨Favorite Activities✨</Text>}
             data={ potentialMatches[cursor].favoriteActivities}
             // renderItem={({ item }) => <ActivityCell activity={item} />}/>
             renderItem={({ item }) => (<Text style={styles.items}>{<ActivityCell activity={item}/>}</Text>)}
