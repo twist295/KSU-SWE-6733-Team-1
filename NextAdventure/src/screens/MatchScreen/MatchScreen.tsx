@@ -15,13 +15,16 @@ import {
 import type { Profile } from '../../utils/Type'
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#ccffff',
+  },
+
   header: {
     fontSize: 24,
-    fontFamily: 'Cormorant',
+    fontFamily: 'Righteous',
     marginLeft: 5,
     marginBottom: 5,
-    //color: '#333333'
-
   },
  
   pfp: {
@@ -30,19 +33,19 @@ const styles = StyleSheet.create({
   },
 
   name: {
-    fontSize: 30,
-    //fontFamily: 'Prata',
+    fontSize: 35,
+    marginBottom: 5,
     fontFamily: 'Lobster',
     textAlign: 'center',
     marginTop: 10,
-    color: '#333333'
-
+    color: '#002050',
   },
 
   distance: {
-    fontSize: 15,
+    fontSize: 17,
     fontFamily: 'Ubuntu',
     marginLeft: 10,
+    marginBottom: 10
     },
 
   txt: {
@@ -51,28 +54,22 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     fontSize: 25,
-    //fontFamily: 'Ubuntu',
     fontFamily: 'DancingBold',
     textAlign: 'center',
     color: '#ff0099'
   },
 
-  container: {
-    flex: 1,
-    backgroundColor: '#ccffff',
-    
-  },
-
   passOrMatch: {
     marginLeft:10,
     marginRight: 10,
-    fontFamily: 'Monoton',
-    color: '#0000ff',
-    marginTop: 15
+    marginTop: 280,
+    fontFamily: 'AlfaSlabOne',
+    color: '#eb5559',
+    fontSize: 30
   },
 
   items: {
-    marginLeft: 15,
+    marginLeft: 30,
   }
 
   
