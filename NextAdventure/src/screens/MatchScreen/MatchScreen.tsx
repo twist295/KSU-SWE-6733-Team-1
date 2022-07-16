@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Cormorant',
     marginLeft: 5,
     marginBottom: 5,
-    color: '#333333'
+    //color: '#333333'
 
   },
  
@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
 
   name: {
     fontSize: 30,
-    fontFamily: 'Prata',
+    //fontFamily: 'Prata',
+    fontFamily: 'Lobster',
     textAlign: 'center',
     marginTop: 10,
     color: '#333333'

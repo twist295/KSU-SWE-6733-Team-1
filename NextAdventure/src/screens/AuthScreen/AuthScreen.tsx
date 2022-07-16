@@ -30,7 +30,8 @@ const AuthScreen: FC<Props> = ({ navigation }) => {
     'DancingBold': require('../AuthScreen/assets/fonts/DancingScript-Bold.ttf'),
     'Anton': require('../AuthScreen/assets/fonts/Anton-Regular.ttf'),
     'Prata': require('../AuthScreen/assets/fonts/Prata-Regular.ttf'),
-    'Cormorant': require('../AuthScreen/assets/fonts/CormorantSC-Bold.ttf')
+    'Cormorant': require('../AuthScreen/assets/fonts/CormorantSC-Bold.ttf'),
+    'Lobster': require('../AuthScreen/assets/fonts/Lobster-Regular.ttf')
   })
   if(!fontsLoaded){
     return <AppLoading/>
