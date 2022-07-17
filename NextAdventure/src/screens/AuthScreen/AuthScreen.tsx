@@ -23,18 +23,20 @@ const AuthScreen: FC<Props> = ({ navigation }) => {
   const [isResettingPW, setIsResettingPW] = useState(false)
 
   let [ fontsLoaded ] = useFonts({
-    'Monoton': require('../AuthScreen/assets/fonts/Monoton-Regular.ttf'),
-    'ComingSoon': require('../AuthScreen/assets/fonts/ComingSoon-Regular.ttf'),
-    'Dancing': require('../AuthScreen/assets/fonts/DancingScript-Regular.ttf'),
-    'Ubuntu': require('../AuthScreen/assets/fonts/Ubuntu-Regular.ttf'),
-    'DancingBold': require('../AuthScreen/assets/fonts/DancingScript-Bold.ttf'),
-    'Anton': require('../AuthScreen/assets/fonts/Anton-Regular.ttf'),
-    'Prata': require('../AuthScreen/assets/fonts/Prata-Regular.ttf'),
-    'Cormorant': require('../AuthScreen/assets/fonts/CormorantSC-Bold.ttf'),
-    'Lobster': require('../AuthScreen/assets/fonts/Lobster-Regular.ttf'),
-    'Righteous': require('./assets/fonts/Righteous-Regular.ttf'),
-    'AlfaSlabOne': require('./assets/fonts/AlfaSlabOne-Regular.ttf'),
-    'AbrilFatface': require('./assets/fonts/AbrilFatface-Regular.ttf')
+    'Monoton': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Monoton-Regular.ttf'),
+    'ComingSoon': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/ComingSoon-Regular.ttf'),
+    'Dancing': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/DancingScript-Regular.ttf'),
+    'Ubuntu': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Ubuntu-Regular.ttf'),
+    'DancingBold': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/DancingScript-Bold.ttf'),
+    'Anton': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Anton-Regular.ttf'),
+    'Prata': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Prata-Regular.ttf'),
+    'Cormorant': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/CormorantSC-Bold.ttf'),
+    'Lobster': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Lobster-Regular.ttf'),
+    'Righteous': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Righteous-Regular.ttf'),
+    'AlfaSlabOne': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/AlfaSlabOne-Regular.ttf'),
+    'AbrilFatface': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/AbrilFatface-Regular.ttf'),
+
+    
   })
   if(!fontsLoaded){
     return <AppLoading/>
@@ -60,7 +62,7 @@ const AuthScreen: FC<Props> = ({ navigation }) => {
     <View style = {styles.container}>
       
       <View style = {styles.image}>
-      <Image source={require('../AuthScreen/./assets/images.jpeg')}/>
+      <Image source={require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/images.jpeg')}/>
       </View>
 
       <Text style = {styles.baseText}>Venture
