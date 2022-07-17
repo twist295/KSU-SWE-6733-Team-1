@@ -105,3 +105,6 @@ All test files are contained in the same folder of the files they test against. 
 
 A plugin will eventually be added to the repository to indicate coverage and test suite status in a future sprint.
 
+## Sprints
+[Sprint 1](Sprint1/README.md)
+[Sprint 2](Sprint2/README.md)
