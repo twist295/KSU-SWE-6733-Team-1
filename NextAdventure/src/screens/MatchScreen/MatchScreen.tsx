@@ -128,7 +128,7 @@ const MatchScreen = () => {
           <Text style={styles.name}>{potentialMatches[cursor].firstName}</Text>
           <Text style={styles.distance}>📍3000 miles away</Text>
           <FlatList
-            ListHeaderComponent={<Text style={styles.header}>✨Favorite Activities✨</Text>}
+            ListHeaderComponent={<Text style={styles.header}>✨ Favorite Activities✨</Text>}
             data={ potentialMatches[cursor].favoriteActivities}
             // renderItem={({ item }) => <ActivityCell activity={item} />}/>
             renderItem={({ item }) => (<Text style={styles.items}>{<ActivityCell activity={item}/>}</Text>)}
