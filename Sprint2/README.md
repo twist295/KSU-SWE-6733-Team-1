@@ -53,13 +53,22 @@ Ploynapas Pawachot
 
 - We set up our CI system
 
+// TODO: image
+
 - We doubled our test suite cases
 
+// TODO: image
+
 - We added an initial version of matching to the application
+
 - We also added a working chat interface
+
+<img width="370" alt="Screen Shot 2022-07-17 at 6 39 29 AM" src="https://user-images.githubusercontent.com/10526932/179401114-17251a22-ab21-4fee-b7aa-baac06087456.png">
 
 - We added new styling to many parts of the application
 
-// TODO: Auth screeen
-// TODO: Match screen
-// TODO: Profile screen
+<img width="1440" alt="MicrosoftTeams-image (1)" src="https://user-images.githubusercontent.com/10526932/179401044-5154e5c9-b328-4d37-830d-b072dbe5da8b.png">
+
+<img width="1440" alt="MicrosoftTeams-image (2)" src="https://user-images.githubusercontent.com/10526932/179401065-7fb5be4a-f9b2-4abe-b28d-a798bfcae62d.png">
+
+![MicrosoftTeams-image (3)](https://user-images.githubusercontent.com/10526932/179401136-f70a1fe9-9394-414b-99cf-724a8ff1f4f6.png)
