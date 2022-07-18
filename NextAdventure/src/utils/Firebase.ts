@@ -86,6 +86,8 @@ export const setProfile = async (profile: Profile) => {
   if (profile.photoURL) {
     body.photoURL = profile.photoURL
   }
+
+  console.log({ body })
   
   return await setDoc(doc(db, 'profiles', auth.currentUser!.uid), body)
 }

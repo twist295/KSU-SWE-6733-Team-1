@@ -28,12 +28,14 @@ const styles = StyleSheet.create({
 })
 
 const InboxScreen = ({ navigation }: Props) => {
+  const [loading, setLoading] = useState(false)
   const [matches, setMatches] = useState<Profile[]>([])
   const [latestMessages, setLatestMessages] = useState<{ [key: string]: Message | null }>({})
-
-  useEffect(() => {
-    Promise.all([getMatches(), getProfiles()])
-      .then(([_matches, profiles]) => {
+  
+  const getInbox = async () => {
+    setLoading(true)
+    return Promise.all([getMatches(), getProfiles()])
+      .then(async ([_matches, profiles]) => {
         const mutualMatchProfiles = [] as Profile[]
         _matches.forEach(uid => {
           if (profiles[uid]) {
@@ -42,13 +44,19 @@ const InboxScreen = ({ navigation }: Props) => {
         })
 
         setMatches(mutualMatchProfiles)
-
-        getLatestMessageForThreads(mutualMatchProfiles.map((match) => match.uid!))
-          .then(setLatestMessages)
-          .catch(console.log)
       })
       .catch(console.log)
+      .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    getInbox()
   }, [])
+
+  useEffect(() => {
+    const uids = matches.map((match) => match.uid!)
+    getLatestMessageForThreads(uids)
+  }, [matches])
 
   const renderProfile = (profile: Profile) => {
     return (
@@ -67,9 +75,12 @@ const InboxScreen = ({ navigation }: Props) => {
   }
 
   return (
-    <View>
-      <FlatList data={matches} renderItem={({ item }) => renderProfile(item)} />
-    </View>
+    <FlatList
+      data={matches}
+      refreshing={loading}
+      onRefresh={getInbox}
+      renderItem={({ item }) => renderProfile(item)}
+      testID="list" />
   )
 }
 

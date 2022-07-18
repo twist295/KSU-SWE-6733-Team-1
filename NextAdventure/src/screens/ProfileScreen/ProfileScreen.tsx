@@ -35,13 +35,12 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
   const [editingActivity, setEditingActivity] = useState<number>(-1)
   const [pictureUrl, setPictureUrl] = useState<string | null>(null)
   const [hasUpdatedPFP, setHasUpdatedPFP] = useState(false)
-
-  useEffect(() => {
-    refreshProfile()
-  }, [])
+  const [loading, setLoading] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
   const refreshProfile = () => {
-    getProfile()
+    setLoading(true)
+    return getProfile()
     .then(profile => {
       if (!profile) {
         setIsEditing(true)
@@ -56,7 +55,18 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
       }
     })
     .catch(err => console.log(err))
+    .finally(() => setLoading(false))
   }
+
+  useEffect(() => {
+    refreshProfile()
+  }, [])
+
+  useEffect(() => {
+    if (isSaving) {
+      save()
+    }
+  }, [isSaving])
 
   useEffect(() => {
     navigation.setOptions({ 
@@ -69,7 +79,7 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
       headerRight: () => isEditing ? (
         <Button
           title="Save"
-          onPress={() => save()} />
+          onPress={() => setIsSaving(true)} />
       ) : (
         <Button title="Edit" onPress={() => setIsEditing(true)}/>
       )
@@ -78,14 +88,27 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
 
   const addActivity = (activity: Activity) => {
     setFavoriteActivites([...favoriteActivities, activity])
+  }
+
+  useEffect(() => {
     setIsAddingActivity(false)
+    setEditingActivity(-1)
+    setLoading(false)
+  }, [favoriteActivities])
+
+  const deleteActivity = (activity: Activity) => {
+    const updatedFavoriteActivities = [...favoriteActivities]
+    const index = updatedFavoriteActivities.findIndex((_activity) => _activity.type === activity.type)
+    if (index > -1) {
+      updatedFavoriteActivities.splice(index, 1)
+    }
+    setFavoriteActivites(updatedFavoriteActivities)
   }
 
   const updateActivity = (activity: Activity) => {
     const updatedFavoriteActivities = [...favoriteActivities]
     updatedFavoriteActivities[editingActivity] = activity
     setFavoriteActivites(updatedFavoriteActivities)
-    setEditingActivity(-1)
   }
 
   const save = async () => {
@@ -101,11 +124,12 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
       }
 
       await setProfile(profile)
-      refreshProfile()
       setIsEditing(false)
       setHasUpdatedPFP(false)
     } catch (err) {
       console.log(err)
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -172,11 +196,13 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
           ListHeaderComponent={<Text style={styles.header}>Favorite Activities</Text>} 
           ListFooterComponent={isEditing ? (<Button title="Add New" onPress={() => setIsAddingActivity(true)}/>) : null }
           data={favoriteActivities}
+          onRefresh={refreshProfile}
+          refreshing={loading}
           renderItem={({ item, index }) => renderActivity(item, index)} 
           style={styles.favoriteActivities}/>
       </View>
       <View style={styles.signout}>
-        <Button color="red" title="Sign Out" onPress={signout} />
+        <Button color="red" title="Sign Out" onPress={signout} testID="signout-button"/>
       </View>
       <ActivityModal
         onConfirm={addActivity}
@@ -185,6 +211,7 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
       <ActivityModal
         activity={editingActivity !== -1 ? favoriteActivities[editingActivity] : null}
         onConfirm={updateActivity}
+        onDelete={deleteActivity}
         onDismiss={() => setEditingActivity(-1)}
         visible={editingActivity != -1}/>
     </View>

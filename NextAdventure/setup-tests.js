@@ -2,6 +2,7 @@ import 'react-native';
 import 'jest-enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
+import enableHooks from 'jest-react-hooks-shallow';
 
 /**
  * Set up DOM in node.js environment for Enzyme to mount to
@@ -24,6 +25,8 @@ global.navigator = {
   userAgent: 'node.js',
 };
 copyProps(window, global);
+
+enableHooks(jest)
 
 /**
  * Set up Enzyme to mount to DOM, simulate events,
