@@ -53,10 +53,6 @@ const ActivityModal = ({ activity, onConfirm, onDelete, onDismiss, visible }: Pr
   }, [activity])
   
   const confirmPressed = () => {
-    if (type.length === 0) {
-      return
-    }
-
     onConfirm({ attitude, preferences, skillLevel, type })
   }
 
@@ -90,10 +86,16 @@ const ActivityModal = ({ activity, onConfirm, onDelete, onDismiss, visible }: Pr
                 style={styles.segment}/>
               <Text style={styles.header}>Preferences</Text>
               <Button
+                disabled={type.length === 0}
                 onPress={confirmPressed}
                 testID="confirm-button"
                 title="Add" />
-              {activity && onDelete && <Button onPress={() => onDelete(activity)} title="Delete" />}
+              {activity && onDelete && (
+                <Button
+                  onPress={() => onDelete(activity)}
+                  testID="delete-button" 
+                  title="Delete" />
+              )}
             </View>
           </TouchableWithoutFeedback>
         </View>

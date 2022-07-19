@@ -1,7 +1,8 @@
 import { shallow } from 'enzyme'
 import ActivityModal from './ActivityModal'
-import { createActivity, getComponent } from '../../utils/Test'
-import { Attitude, SkillLevel } from '../../utils/Type'
+import {
+  createActivity,
+  getComponent, componentExists } from '../../utils/Test'
 
 describe('Components > ActivityModal', () => {
   it('should populate fields when editing activity', () => {
@@ -17,7 +18,7 @@ describe('Components > ActivityModal', () => {
     expect(typeField.props().value).toEqual('Skateboarding')
   })
 
-  it('should not confirm changes with empty type', () => {
+  it('should disable confirmation with empty type', () => {
     const onConfirm = jest.fn()
 
     const wrapper = shallow(
@@ -29,9 +30,9 @@ describe('Components > ActivityModal', () => {
     )
 
     const confirmButton = getComponent(wrapper, 'confirm-button')
-    confirmButton.props().onPress()
+    confirmButton.props().disabled
 
-    expect(onConfirm).toHaveBeenCalledTimes(0)
+    expect(confirmButton.props().disabled).toBeTruthy()
   })
 
   it('should confirm with expected payload', () => {
@@ -49,7 +50,37 @@ describe('Components > ActivityModal', () => {
     const confirmButton = getComponent(wrapper, 'confirm-button')
     confirmButton.props().onPress()
 
-    expect(onConfirm).toHaveBeenCalledWith({
-      attitude: activity.attitude, preferences: activity.preferences, skillLevel: activity.skillLevel, type: activity.type })
+    expect(onConfirm).toHaveBeenCalledWith(activity)
+  })
+
+  it('should not show delete button when adding activity', () => {
+    const wrapper = shallow(
+      <ActivityModal 
+        onDelete={jest.fn()}
+        onConfirm={jest.fn()}
+        onDismiss={jest.fn()}
+        visible={true}/>
+    )
+
+    expect(componentExists(wrapper, 'delete-button')).toBeFalsy()
+  })
+
+  it('should call onDelete when delete button pressed', () => {
+    const onDelete = jest.fn()
+    const activity = createActivity({ type: 'Skateboarding' })
+    
+    const wrapper = shallow(
+      <ActivityModal 
+        activity={activity}
+        onDelete={onDelete}
+        onConfirm={jest.fn()}
+        onDismiss={jest.fn()}
+        visible={true}/>
+    )
+
+    const deleteButton = getComponent(wrapper, 'delete-button')
+    deleteButton.props().onPress()
+
+    expect(onDelete).toHaveBeenCalledWith(activity)
   })
 })

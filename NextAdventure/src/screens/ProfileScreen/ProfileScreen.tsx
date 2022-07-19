@@ -147,14 +147,15 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
 
   const renderProfilePicture = () => {
     if (!pictureUrl) {
-      return <TouchableOpacity disabled={!isEditing} onPress={pickImage} style={styles.emptyPfp}/>
+      return (
+        <TouchableOpacity disabled={!isEditing} onPress={pickImage} style={styles.emptyPfp} testID="empty-pfp-button"/>)
     }
 
     return (
       <TouchableOpacity disabled={!isEditing} onPress={pickImage}>
         <Image
           source={{ uri: pictureUrl }}
-          style={styles.pfp} />
+          style={styles.pfp} testID="profile-image"/>
       </TouchableOpacity>
     )
   }
@@ -194,7 +195,9 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
         {/* { isEditing ? <TextInput placeholder="Location" /> :  <Text></Text> } */}
         <FlatList
           ListHeaderComponent={<Text style={styles.header}>Favorite Activities</Text>} 
-          ListFooterComponent={isEditing ? (<Button title="Add New" onPress={() => setIsAddingActivity(true)}/>) : null }
+          ListFooterComponent={isEditing ? (
+            <Button title="Add New" onPress={() => setIsAddingActivity(true)}/>
+          ) : null }
           data={favoriteActivities}
           onRefresh={refreshProfile}
           refreshing={loading}
