@@ -23,7 +23,14 @@ In our mob programming session on 7/12/22, we:
 
 ## CI System
 
-// TODO
+The CI System we chose to use was [Codemage](https://codemagic.io/start/). The reason we chose this is because the core stack of our application is React Native to support Android/iOS/web in as reusable way as possible. Because of that we needed a CI tool that supported this in a first-class manner, which Codemagic supported out of the box. We also went with a managed solution because the effort in putting together an in-house CI system like with Jenkins would be better spent in getting the application ready for customer review.
+
+ Your rationale for the CI tool used (i.e., why did you use this CI tool?) is clearly documented in your git repo, plus the evidence/link is included in your git’s repo.
+ 
+ <img width="853" alt="Screen Shot 2022-07-19 at 8 23 09 AM" src="https://user-images.githubusercontent.com/10526932/179788202-cc09acd4-3fa0-4dff-9277-cb76f8bab6bd.png">
+
+<img width="523" alt="Screen Shot 2022-07-19 at 8 22 56 AM" src="https://user-images.githubusercontent.com/10526932/179788223-0a1d2e2d-c15e-46b0-b112-f39720c6606f.png">
+
 
 ## Daily Scrum (From July 12, 2022)
 
@@ -33,9 +40,9 @@ Alvin Abia
 - Blocker: Came back from vacation and getting caught up with all the stuff we've done int he past week
 
 Aparna Sykam
--
--
--
+- Worked on profile screen styling
+- Continuing to style profile screen children components
+- Blockers: none
 
 Mohan Neupane
 - I did code reviews for Login page, AuthPage and match screen 
@@ -53,7 +60,9 @@ Ploynapas Pawachot
 
 - We set up our CI system
 
-// TODO: image
+<img width="1471" alt="Screen Shot 2022-07-19 at 8 23 20 AM" src="https://user-images.githubusercontent.com/10526932/179788137-2fe6f42f-fa11-4cae-8554-1f9725b8b470.png">
+
+
 
 - We doubled our test suite cases
 
