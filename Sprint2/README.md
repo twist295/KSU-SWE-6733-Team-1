@@ -19,7 +19,9 @@ In our mob programming session on 7/12/22, we:
 
 ## Test Suite
 
-// TODO
+As of 7/19/2022, our test coverage comprised of 20 unit tests and 2 BDD tests across 8 test suites:
+
+<img width="555" alt="Screen Shot 2022-07-19 at 8 42 21 AM" src="https://user-images.githubusercontent.com/10526932/179792537-61ad8be0-dc5a-4ec1-9a0c-c325c4f96db6.png">
 
 ## CI System
 
@@ -65,8 +67,6 @@ Ploynapas Pawachot
 
 
 - We doubled our test suite cases
-
-// TODO: image
 
 - We added an initial version of matching to the application
 
