@@ -1,5 +1,4 @@
 import {
-  FC,
   useEffect,
   useState,
 } from 'react'
@@ -38,7 +37,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const ActivityModal: FC<Props> = ({ activity, onConfirm, onDismiss, visible }) => {
+const ActivityModal = ({ activity, onConfirm, onDelete, onDismiss, visible }: Props) => {
   const [attitude, setAttitude] = useState(Attitude.Like)
   const [preferences, setPreferences] = useState([] as string[])
   const [skillLevel, setSkillLevel] = useState(SkillLevel.Intermediate)
@@ -71,6 +70,7 @@ const ActivityModal: FC<Props> = ({ activity, onConfirm, onDismiss, visible }) =
               <TextInput
                 onChange={({ nativeEvent }) => setType(nativeEvent.text)}
                 placeholder="Type" 
+                testID="type-field"
                 value={type} />
               <Text style={styles.header}>Skill Level</Text>
               <SegmentControl
@@ -85,7 +85,17 @@ const ActivityModal: FC<Props> = ({ activity, onConfirm, onDismiss, visible }) =
                 selectedIndex={attitude} 
                 style={styles.segment}/>
               <Text style={styles.header}>Preferences</Text>
-              <Button onPress={confirmPressed} title="Add" />
+              <Button
+                disabled={type.length === 0}
+                onPress={confirmPressed}
+                testID="confirm-button"
+                title="Add" />
+              {activity && onDelete && (
+                <Button
+                  onPress={() => onDelete(activity)}
+                  testID="delete-button" 
+                  title="Delete" />
+              )}
             </View>
           </TouchableWithoutFeedback>
         </View>

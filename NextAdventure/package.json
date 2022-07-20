@@ -21,7 +21,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-native": "0.68.2",
-    "react-native-gesture-handler": "~2.2.1",
+    "react-native-gesture-handler": "~2.4.0",
     "react-native-safe-area-context": "4.2.4",
     "react-native-screens": "~3.11.1",
     "react-native-web": "0.17.7"
@@ -39,6 +39,7 @@
     "jest": "^28.1.1",
     "jest-environment-jsdom": "^28.1.1",
     "jest-enzyme": "^7.1.2",
+    "jest-react-hooks-shallow": "^1.5.1",
     "jsdom": "^20.0.0",
     "mocha": "^10.0.0",
     "ts-jest": "^28.0.5",

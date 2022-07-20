@@ -19,7 +19,7 @@ export type StackParamList = {
 }
 
 export type TabParamList = {
-  Social: undefined
-  Match: undefined
-  Profile: undefined
+  SocialStack: undefined
+  MatchStack: undefined
+  ProfileStack: undefined
 }

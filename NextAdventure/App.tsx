@@ -70,9 +70,9 @@ export default function App() {
     <NavigationContainer>
       {signedIn ? (
         <Tab.Navigator screenOptions={{ headerShown: false }}>
-          <Tab.Screen name="Social" component={SocialStackScreen}  />
-          <Tab.Screen name="Match" component={MatchStackScreen} />
-          <Tab.Screen name="Profile" component={ProfileStackScreen} />
+          <Tab.Screen name="SocialStack" component={SocialStackScreen}  />
+          <Tab.Screen name="MatchStack" component={MatchStackScreen} />
+          <Tab.Screen name="ProfileStack" component={ProfileStackScreen} />
         </Tab.Navigator>
       ) : (
         <Stack.Navigator>

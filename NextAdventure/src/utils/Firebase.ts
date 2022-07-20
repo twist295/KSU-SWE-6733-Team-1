@@ -118,7 +118,6 @@ export const updateProfilePicture = async (uri: string) => {
       resolve(xhr.response);
     };
     xhr.onerror = function (e) {
-      console.log(e);
       reject(new TypeError("Network request failed"));
     };
     xhr.responseType = "blob";
@@ -130,6 +129,7 @@ export const updateProfilePicture = async (uri: string) => {
   const imageRef = ref(storage, `images/${getUser()!.uid}`);
   await uploadBytes(imageRef, blob)
 
+  // @ts-ignore
   blob.close()
 
   const url = await getDownloadURL(imageRef)
