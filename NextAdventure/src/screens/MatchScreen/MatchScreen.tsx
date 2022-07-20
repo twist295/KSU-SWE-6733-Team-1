@@ -1,10 +1,12 @@
 import { types } from '@babel/core';
 import { useEffect, useState } from 'react'
 import { 
+  ActivityIndicator,
   Button,
   FlatList,
   Image,
-  StyleSheet, Text, TouchableOpacity, View 
+  StyleSheet,
+  Text, TouchableOpacity, View 
 } from 'react-native'
 import { Directions } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -80,6 +82,7 @@ const styles = StyleSheet.create({
 const MatchScreen = () => {
   const [potentialMatches, setPotentialMatches] = useState<Profile[]>([])
   const [cursor, setCursor] = useState(0)
+  const [firstLoad, setFirstLoad] = useState(false)
 
   useEffect(() => {
     getProfiles()
@@ -92,6 +95,7 @@ const MatchScreen = () => {
           .map(uid => ({ uid, ...profiles[uid] }))
 
         setPotentialMatches(otherProfiles)
+        setFirstLoad(true)
       })
       .catch(console.log)
   }, [])
@@ -120,11 +124,13 @@ const MatchScreen = () => {
       <View style={styles.container}>
       {potentialMatches[cursor] ? (
         <Swipeable
+          containerStyle={{ flex: 1 }}
           renderLeftActions={() => renderActions(Directions.LEFT)}
-          renderRightActions={() => renderActions(Directions.RIGHT)} containerStyle={{ flex: 1 }}>
+          renderRightActions={() => renderActions(Directions.RIGHT)}>
           <Image
             source={{ uri: potentialMatches[cursor].photoURL }}
-            style={styles.pfp} />
+            style={styles.pfp}
+            testID="match-image"/>
           <Text style={styles.name}>{potentialMatches[cursor].firstName}</Text>
           <Text style={styles.distance}>📍3000 miles away</Text>
           <FlatList
@@ -136,10 +142,14 @@ const MatchScreen = () => {
 
                  
         </Swipeable>
+      ) : !firstLoad ? (
+        <ActivityIndicator />
       ) : (
         <View>
           <Text style={styles.txt}>You've swiped through all your suggested matches, please come back later or restart!</Text>
-          <Button onPress={() => setCursor(0)} title="Restart" />
+          <Button
+            onPress={() => setCursor(0)}
+            title="Restart" testID="restart-button" />
         </View>
       ) }
     </View>

@@ -1,5 +1,5 @@
 import { launchImageLibraryAsync } from 'expo-image-picker'
-import { 
+import {
   FC,
   useEffect,
   useState
@@ -7,12 +7,12 @@ import {
 import {
   Button,
   FlatList,
-  Image, 
+  Image,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View 
+  View
 } from 'react-native'
 import { Props } from './ProfileScreen.type'
 import ActivityCell from '../../components/ActivityCell/ActivityCell'
@@ -25,6 +25,7 @@ import {
 } from '../../utils/Firebase'
 import type { Profile } from '../../utils/Type'
 import type { Activity } from '../../utils/Type'
+import { browserPopupRedirectResolver } from 'firebase/auth'
 
 const ProfileScreen: FC<Props> = ({ navigation }) => {
   const [firstName, setFirstName] = useState('')
@@ -35,13 +36,12 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
   const [editingActivity, setEditingActivity] = useState<number>(-1)
   const [pictureUrl, setPictureUrl] = useState<string | null>(null)
   const [hasUpdatedPFP, setHasUpdatedPFP] = useState(false)
-
-  useEffect(() => {
-    refreshProfile()
-  }, [])
+  const [loading, setLoading] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
   const refreshProfile = () => {
-    getProfile()
+    setLoading(true)
+    return getProfile()
     .then(profile => {
       if (!profile) {
         setIsEditing(true)
@@ -56,7 +56,18 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
       }
     })
     .catch(err => console.log(err))
+    .finally(() => setLoading(false))
   }
+
+  useEffect(() => {
+    refreshProfile()
+  }, [])
+
+  useEffect(() => {
+    if (isSaving) {
+      save()
+    }
+  }, [isSaving])
 
   useEffect(() => {
     navigation.setOptions({ 
@@ -64,28 +75,41 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
         <Button
           color="red"
           title="Cancel"
-          onPress={() => setIsEditing(false)}/>
+          onPress={() => setIsEditing(false)} />
       ) : <></>,
       headerRight: () => isEditing ? (
         <Button
           title="Save"
-          onPress={() => save()} />
+          onPress={() => setIsSaving(true)} />
       ) : (
-        <Button title="Edit" onPress={() => setIsEditing(true)}/>
+        <Button title="Edit" onPress={() => setIsEditing(true)} />
       )
     })
   }, [isEditing])
 
   const addActivity = (activity: Activity) => {
     setFavoriteActivites([...favoriteActivities, activity])
+  }
+
+  useEffect(() => {
     setIsAddingActivity(false)
+    setEditingActivity(-1)
+    setLoading(false)
+  }, [favoriteActivities])
+
+  const deleteActivity = (activity: Activity) => {
+    const updatedFavoriteActivities = [...favoriteActivities]
+    const index = updatedFavoriteActivities.findIndex((_activity) => _activity.type === activity.type)
+    if (index > -1) {
+      updatedFavoriteActivities.splice(index, 1)
+    }
+    setFavoriteActivites(updatedFavoriteActivities)
   }
 
   const updateActivity = (activity: Activity) => {
     const updatedFavoriteActivities = [...favoriteActivities]
     updatedFavoriteActivities[editingActivity] = activity
     setFavoriteActivites(updatedFavoriteActivities)
-    setEditingActivity(-1)
   }
 
   const save = async () => {
@@ -101,36 +125,38 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
       }
 
       await setProfile(profile)
-      refreshProfile()
       setIsEditing(false)
       setHasUpdatedPFP(false)
     } catch (err) {
       console.log(err)
+    } finally {
+      setIsSaving(false)
     }
   }
 
   const renderActivity = (activity: Activity, index: number) => {
     const accessory = isEditing ? (
       <View style={styles.editActivityButton}>
-        <Button onPress={() => setEditingActivity(index)} title="Edit"/>
+        <Button onPress={() => setEditingActivity(index)} title="Edit" />
       </View>
     ) : null
 
     return (
-      <ActivityCell activity={activity} accessory={accessory}/>
+      <ActivityCell activity={activity} accessory={accessory} />
     )
   }
 
   const renderProfilePicture = () => {
     if (!pictureUrl) {
-      return <TouchableOpacity disabled={!isEditing} onPress={pickImage} style={styles.emptyPfp}/>
+      return (
+        <TouchableOpacity disabled={!isEditing} onPress={pickImage} style={styles.emptyPfp} testID="empty-pfp-button"/>)
     }
 
     return (
       <TouchableOpacity disabled={!isEditing} onPress={pickImage}>
         <Image
           source={{ uri: pictureUrl }}
-          style={styles.pfp} />
+          style={styles.pfp} testID="profile-image"/>
       </TouchableOpacity>
     )
   }
@@ -147,46 +173,51 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>{renderProfilePicture()}</View>
       <View>
-        {renderProfilePicture()}
-        <Text style={styles.header}>Personal Info</Text>
+        <Text style={styles.name1}>Profile</Text>
         <View style={styles.name}>
           <Text>Name: </Text>
-          { isEditing ? (
-            <TextInput 
+          {isEditing ? (
+            <TextInput
               onChange={({ nativeEvent }) => setFirstName(nativeEvent.text)}
               placeholder="First Name"
               style={styles.nameInput}
               value={firstName} />
-          ) : <Text>{firstName}</Text> }
-          { isEditing ? (
+          ) : <Text>{firstName}</Text>}
+          {isEditing ? (
             <TextInput
-              onChange={({ nativeEvent }) => setLastName(nativeEvent.text)} 
-              placeholder="Last Name" 
+              onChange={({ nativeEvent }) => setLastName(nativeEvent.text)}
+              placeholder="Last Name"
               style={styles.nameInput}
               value={lastName} />
-          ) :  <Text>{lastName}</Text> }
+          ) : <Text>{lastName}</Text>}
         </View>
         {/* { isEditing ? <TextInput placeholder="Location" /> :  <Text></Text> } */}
         <FlatList
-          ListHeaderComponent={<Text style={styles.header}>Favorite Activities</Text>} 
-          ListFooterComponent={isEditing ? (<Button title="Add New" onPress={() => setIsAddingActivity(true)}/>) : null }
+          ListHeaderComponent={<Text style={styles.name}>Favorite Activities</Text>} 
+          ListFooterComponent={isEditing ? (
+            <Button title="Add New" onPress={() => setIsAddingActivity(true)}/>
+          ) : null }
           data={favoriteActivities}
+          onRefresh={refreshProfile}
+          refreshing={loading}
           renderItem={({ item, index }) => renderActivity(item, index)} 
           style={styles.favoriteActivities}/>
       </View>
       <View style={styles.signout}>
-        <Button color="red" title="Sign Out" onPress={signout} />
+        <Button color="red" title="Sign Out" onPress={signout} testID="signout-button"/>
       </View>
       <ActivityModal
         onConfirm={addActivity}
         onDismiss={() => setIsAddingActivity(false)}
-        visible={isAddingActivity}/>
+        visible={isAddingActivity} />
       <ActivityModal
         activity={editingActivity !== -1 ? favoriteActivities[editingActivity] : null}
         onConfirm={updateActivity}
+        onDelete={deleteActivity}
         onDismiss={() => setEditingActivity(-1)}
-        visible={editingActivity != -1}/>
+        visible={editingActivity != -1} />
     </View>
   )
 }
@@ -194,41 +225,70 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
-    padding: 16,
+    backgroundColor: '#fff',
+
+  },
+
+  header: {
+    fontSize: 24,
+    backgroundColor: "purple",
+    height: 200,
+  },
+  pfp: {
+    marginTop: 120,
+    alignSelf: 'center',
+    borderRadius: 50,
+    height: 120,
+    width: 120,
+    borderColor: 'yellow',
+    borderWidth: 4,
+    marginBottom: 10,
+    position: 'absolute'
   },
   editActivityButton: {
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginRight: 10,
   },
   emptyPfp: {
+    marginTop: 150,
     alignSelf: 'center',
-    backgroundColor: 'gray',
-    borderRadius: 44,
-    height: 88,
-    width: 88
+    borderRadius: 60,
+    height: 120,
+    width: 120,
+    borderColor: 'yellow',
+    borderWidth: 4,
+    backgroundColor: "gray",
+    position: 'absolute'
+  },
+  name1: {
+    flexDirection: 'row',
+    fontSize: 25,
+    fontWeight: "600",
+    marginTop: 100
   },
   favoriteActivities: {
-    marginTop: 16,
+    marginTop: 20,
+    marginBottom: 20,
+    border: 10,
+
   },
-  header: {
-    fontSize: 24
-  },
+
   name: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    fontSize: 25,
+    fontWeight: "600",
+    marginTop: 10
+
   },
   nameInput: {
     borderBottomWidth: 1,
     flexGrow: 1,
     marginHorizontal: 8
   },
-  pfp: {
-    alignSelf: 'center',
-    borderRadius: 44,
-    height: 88,
-    width: 88
-  },
+
   signout: {
     borderWidth: 1
+
   }
 })
 
