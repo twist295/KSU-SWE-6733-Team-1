@@ -260,7 +260,6 @@ const styles = StyleSheet.create({
     backgroundColor: "gray",
     position: 'absolute'
   },
-
   name1: {
     flexDirection: 'row',
     fontSize: 25,

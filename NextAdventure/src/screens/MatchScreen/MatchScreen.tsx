@@ -1,3 +1,4 @@
+import { types } from '@babel/core';
 import { useEffect, useState } from 'react'
 import { 
   ActivityIndicator,
@@ -16,13 +17,66 @@ import {
 import type { Profile } from '../../utils/Type'
 
 const styles = StyleSheet.create({
-  header: {
-    fontSize: 24
+  container: {
+    flex: 1,
+    backgroundColor: '#ccffff',
   },
+
+  header: {
+    fontSize: 24,
+    fontFamily: 'Righteous',
+    marginLeft: 10,
+    marginBottom: 5,
+  },
+ 
   pfp: {
     height: '50%',
-    width: '100%'
+    width: '100%',
+  },
+
+  name: {
+    fontSize: 35,
+    marginBottom: 5,
+    fontFamily: 'Lobster',
+    textAlign: 'center',
+    marginTop: 10,
+    color: '#002050',
+  },
+
+  distance: {
+    fontSize: 17,
+    fontFamily: 'Ubuntu',
+    marginLeft: 10,
+    marginBottom: 10
+    },
+
+  txt: {
+    marginTop: 220,
+    marginBottom: 30,
+    marginLeft: 20,
+    marginRight: 20,
+    fontSize: 25,
+    fontFamily: 'DancingBold',
+    textAlign: 'center',
+    color: '#ff0099'
+  },
+
+  passOrMatch: {
+    marginLeft:10,
+    marginRight: 10,
+    marginTop: 280,
+    fontFamily: 'AlfaSlabOne',
+    color: '#eb5559',
+    fontSize: 30
+  },
+
+  items: {
+    marginLeft: 35,
   }
+
+  
+  
+  
 })
 
 const MatchScreen = () => {
@@ -60,13 +114,14 @@ const MatchScreen = () => {
 
     return (
       <TouchableOpacity onPress={() => onPress(direction)}>
-        <Text>{direction === Directions.LEFT ? 'MATCH' : 'PASS'}</Text>
+        <Text style={styles.passOrMatch}>{direction === Directions.LEFT ? 'MATCH' : 'PASS'}</Text>
       </TouchableOpacity>
     )
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    //<View style={{ flex: 1 }}>
+      <View style={styles.container}>
       {potentialMatches[cursor] ? (
         <Swipeable
           containerStyle={{ flex: 1 }}
@@ -76,18 +131,22 @@ const MatchScreen = () => {
             source={{ uri: potentialMatches[cursor].photoURL }}
             style={styles.pfp}
             testID="match-image"/>
-          <Text style={styles.header}>{potentialMatches[cursor].firstName}</Text>
-          <Text>3000 miles away</Text>
+          <Text style={styles.name}>{potentialMatches[cursor].firstName}</Text>
+          <Text style={styles.distance}>📍3000 miles away</Text>
           <FlatList
-            ListHeaderComponent={<Text style={styles.header}>Favorite Activities</Text>} 
-            data={potentialMatches[cursor].favoriteActivities} 
-            renderItem={({ item }) => <ActivityCell activity={item} />}/>
+            ListHeaderComponent={<Text style={styles.header}>✨Favorite Activities✨</Text>}
+            data={ potentialMatches[cursor].favoriteActivities}
+            // renderItem={({ item }) => <ActivityCell activity={item} />}/>
+            renderItem={({ item }) => (<Text style={styles.items}>{<ActivityCell activity={item}/>}</Text>)}
+            />
+
+                 
         </Swipeable>
       ) : !firstLoad ? (
         <ActivityIndicator />
       ) : (
         <View>
-          <Text>You've swiped through all your suggested matches, please come back later or restart!</Text>
+          <Text style={styles.txt}>You've swiped through all your suggested matches, please come back later or restart!</Text>
           <Button
             onPress={() => setCursor(0)}
             title="Restart" testID="restart-button" />
