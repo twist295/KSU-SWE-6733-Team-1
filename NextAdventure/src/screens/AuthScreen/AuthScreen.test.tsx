@@ -2,7 +2,10 @@ import { shallow } from 'enzyme'
 import AuthScreen from './AuthScreen'
 import { Props } from './AuthScreen.type'
 import { signIn } from '../../utils/Firebase'
-import { componentExists, getComponent } from '../../utils/Test'
+import {
+  componentExists,
+  getComponent
+} from '../../utils/Test'
 
 jest.mock('../../utils/Firebase', () => ({
   signIn: jest.fn()
@@ -39,7 +42,8 @@ describe('Screens > AuthScreen', () => {
     const wrapper = shallow(
       <AuthScreen 
         navigation={navigation as Navigation}
-        route={route as Route}/>)
+        route={route as Route}/>
+    )
     const loginButton = getComponent(wrapper, 'login-button')
 
     expect(loginButton.props().disabled).toBeTruthy()

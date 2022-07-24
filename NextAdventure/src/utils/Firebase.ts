@@ -27,7 +27,9 @@ import {
 } from 'firebase/storage'
 import type { 
   Message,
-  Profile } from './Type'
+  Profile, 
+  Social
+} from './Type'
 
 export type ProfilesResults = { [key: string]: Profile }
 
@@ -307,4 +309,21 @@ export const sendMessage = async (uid: string, body: string) => {
     timestamp,
     body
   })
+}
+
+export const updateSocials = async (socials: Social[]) => {
+  const auth = getAuth()
+  const db = getFirestore()
+
+  return await setDoc(doc(db, 'socials', auth.currentUser!.uid), { socials })
+}
+
+export const getSocials = async () => {
+  const auth = getAuth()
+  const db = getFirestore()
+
+  const profile = await getDoc(doc(db, 'socials', auth.currentUser!.uid))
+  return profile.exists() 
+    ? Promise.resolve(profile.data() as { socials: Social[]}) 
+    : Promise.resolve(null)
 }

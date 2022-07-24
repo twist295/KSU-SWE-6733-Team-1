@@ -8,6 +8,8 @@ jest.mock('expo-image-picker', () => ({
   launchImageLibraryAsync: jest.fn()
 }))
 
+jest.mock('react-native-webview', () => ({}))
+
 jest.mock('../../utils/Firebase', () => ({
   getProfile: jest.fn().mockResolvedValue({ photoURL: 'twitter.com/blah' }),
   signout: jest.fn()
@@ -23,7 +25,8 @@ describe('Screens > ProfileScreen', () => {
     }
     const route: Partial<Route> = {};
 
-    const wrapper = shallow(<ProfileScreen navigation={navigation as Navigation} route={route as Route}/>)
+    const wrapper = shallow(
+      <ProfileScreen navigation={navigation as Navigation} route={route as Route}/>)
     const button = getComponent(wrapper, 'signout-button')
 
     button.props().onPress()

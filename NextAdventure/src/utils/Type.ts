@@ -34,6 +34,11 @@ export type Profile = {
   favoriteActivities: Activity[]
 }
 
+export type Social = {
+  site: string
+  username: string
+}
+
 /**
  * 
  * @param e 

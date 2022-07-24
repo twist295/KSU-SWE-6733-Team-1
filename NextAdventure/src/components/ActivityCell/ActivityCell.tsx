@@ -1,5 +1,8 @@
-import { FC } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View
+} from 'react-native'
 import { Props } from './ActivityCell.type'
 import { Attitude, SkillLevel, getEnumKeys } from '../../utils/Type'
 
@@ -8,15 +11,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     margin: 10,
-    height: 150,
-    width: 375,
+    padding: 10,
     backgroundColor: '#7a42f4',
     borderRadius: 20,
-
   },
-
   title: {
-    margin: 10,
     textAlign: 'center',
     color: "blue",
     fontWeight: 'bold',
@@ -35,13 +34,14 @@ const styles = StyleSheet.create({
   },
 })
 
-const ActivityCell: FC<Props> = ({ accessory, activity }) => {
+const ActivityCell = ({ accessory, activity }: Props) => {
+  const { type, skillLevel, attitude } = activity
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.title}>{activity.type}</Text>
-        <Text style={styles.skill}>{`Skill Level: ${getEnumKeys(SkillLevel)[activity.skillLevel]}`}</Text>
-        <Text style={styles.attitude}>{`Attitude: ${getEnumKeys(Attitude)[activity.attitude]}`}</Text>
+        <Text style={styles.title}>{type}</Text>
+        <Text style={styles.skill}>{`Skill Level: ${getEnumKeys(SkillLevel)[skillLevel]}`}</Text>
+        <Text style={styles.attitude}>{`Attitude: ${getEnumKeys(Attitude)[attitude]}`}</Text>
       </View>
       {accessory}
     </View>

@@ -1,7 +1,4 @@
-import {
-  FC,
-  useState 
-} from 'react'
+import { useState } from 'react'
 import {
   Button, 
   Pressable,
@@ -10,37 +7,17 @@ import {
   TextInput, 
   View,
   Image
-
 } from 'react-native'
 import { Props } from './AuthScreen.type'
-import { sendPWResetEmail, signIn } from '../../utils/Firebase'
-import { useFonts } from 'expo-font'
-import AppLoading from 'expo-app-loading'
+import {
+  sendPWResetEmail,
+  signIn
+} from '../../utils/Firebase'
 
-const AuthScreen: FC<Props> = ({ navigation }) => {
+const AuthScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isResettingPW, setIsResettingPW] = useState(false)
-
-  let [ fontsLoaded ] = useFonts({
-    'Monoton': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Monoton-Regular.ttf'),
-    'ComingSoon': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/ComingSoon-Regular.ttf'),
-    'Dancing': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/DancingScript-Regular.ttf'),
-    'Ubuntu': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Ubuntu-Regular.ttf'),
-    'DancingBold': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/DancingScript-Bold.ttf'),
-    'Anton': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Anton-Regular.ttf'),
-    'Prata': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Prata-Regular.ttf'),
-    'Cormorant': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/CormorantSC-Bold.ttf'),
-    'Lobster': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Lobster-Regular.ttf'),
-    'Righteous': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/Righteous-Regular.ttf'),
-    'AlfaSlabOne': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/AlfaSlabOne-Regular.ttf'),
-    'AbrilFatface': require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/fonts/AbrilFatface-Regular.ttf'),
-
-    
-  })
-  if(!fontsLoaded){
-    return <AppLoading/>
-  }
   
   const onLogin = async () => {
     try {
@@ -62,7 +39,7 @@ const AuthScreen: FC<Props> = ({ navigation }) => {
     <View style = {styles.container}>
       
       <View style = {styles.image}>
-      <Image source={require('/Users/ploynapaspawachot/Desktop/reactNativeExpoProjects/KSU-SWE-6733-Team-1/NextAdventure/assets/images.jpeg')}/>
+      <Image source={require('../../../assets/images.jpeg')}/>
       </View>
 
       <Text style = {styles.baseText}>Venture
@@ -83,8 +60,10 @@ const AuthScreen: FC<Props> = ({ navigation }) => {
           testID="password-input"
           value={password} />
       )}
-      <Pressable onPress={() => setIsResettingPW(!isResettingPW)} testID="forgot-pw-button">
-        <Text style ={styles.forgot_passowrd}>{isResettingPW ? 'Cancel' : 'Forgot Password?' }</Text>
+      <Pressable 
+        onPress={() => setIsResettingPW(!isResettingPW)}
+        testID="forgot-pw-button">
+        <Text style={styles.forgot_passowrd}>{isResettingPW ? 'Cancel' : 'Forgot Password?' }</Text>
       </Pressable>
         
       { isResettingPW ? (

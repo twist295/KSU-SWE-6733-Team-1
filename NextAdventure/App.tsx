@@ -1,3 +1,4 @@
+import { useFonts } from 'expo-font'
 import { initializeApp } from 'firebase/app'
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 import {
@@ -29,6 +30,21 @@ const SocialStack = createNativeStackNavigator<SocialStackParamList>()
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
+
+  useFonts({
+    'Monoton': require('./assets/fonts/Monoton-Regular.ttf'),
+    'ComingSoon': require('./assets/fonts/ComingSoon-Regular.ttf'),
+    'Dancing': require('./assets/fonts/DancingScript-Regular.ttf'),
+    'Ubuntu': require('./assets/fonts/Ubuntu-Regular.ttf'),
+    'DancingBold': require('./assets/fonts/DancingScript-Bold.ttf'),
+    'Anton': require('./assets/fonts/Anton-Regular.ttf'),
+    'Prata': require('./assets/fonts/Prata-Regular.ttf'),
+    'Cormorant': require('./assets/fonts/CormorantSC-Bold.ttf'),
+    'Lobster': require('./assets/fonts/Lobster-Regular.ttf'),
+    'Righteous': require('./assets/fonts/Righteous-Regular.ttf'),
+    'AlfaSlabOne': require('./assets/fonts/AlfaSlabOne-Regular.ttf'),
+    'AbrilFatface': require('./assets/fonts/AbrilFatface-Regular.ttf'),
+  })
 
   useEffect(() => {
     initializeApp({

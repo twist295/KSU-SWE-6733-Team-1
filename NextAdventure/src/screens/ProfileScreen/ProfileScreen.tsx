@@ -1,6 +1,5 @@
 import { launchImageLibraryAsync } from 'expo-image-picker'
 import {
-  FC,
   useEffect,
   useState
 } from 'react'
@@ -8,6 +7,8 @@ import {
   Button,
   FlatList,
   Image,
+  Linking,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -17,17 +18,18 @@ import {
 import { Props } from './ProfileScreen.type'
 import ActivityCell from '../../components/ActivityCell/ActivityCell'
 import ActivityModal from '../../components/ActivityModal/ActivityModal'
+import InstagramModal from '../../components/InstagramModal/InstagramModal'
 import {
   getProfile,
+  getSocials,
   setProfile,
   signout,
-  updateProfilePicture
+  updateProfilePicture,
+  updateSocials
 } from '../../utils/Firebase'
-import type { Profile } from '../../utils/Type'
-import type { Activity } from '../../utils/Type'
-import { browserPopupRedirectResolver } from 'firebase/auth'
+import type { Activity, Profile, Social } from '../../utils/Type'
 
-const ProfileScreen: FC<Props> = ({ navigation }) => {
+const ProfileScreen = ({ navigation }: Props) => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [favoriteActivities, setFavoriteActivites] = useState<Activity[]>([])
@@ -35,28 +37,39 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editingActivity, setEditingActivity] = useState<number>(-1)
   const [pictureUrl, setPictureUrl] = useState<string | null>(null)
+  const [socials, setSocials] = useState<Social[]>([])
   const [hasUpdatedPFP, setHasUpdatedPFP] = useState(false)
   const [loading, setLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [showInstagramModal, setShowInstagramModal] = useState(false)
 
   const refreshProfile = () => {
     setLoading(true)
-    return getProfile()
-    .then(profile => {
-      if (!profile) {
-        setIsEditing(true)
-        return
-      }
+    
+    getSocials()
+      .then((res) => {
+        if (res && res.socials.length > 0) {
+          setSocials(res.socials)
+        }
+      })
+      .catch(console.log)
 
-      setFirstName(profile.firstName)
-      setLastName(profile.lastName)
-      setFavoriteActivites(profile.favoriteActivities)
-      if (profile.photoURL) {
-        setPictureUrl(profile.photoURL)
-      }
-    })
-    .catch(err => console.log(err))
-    .finally(() => setLoading(false))
+    return getProfile()
+      .then(profile => {
+        if (!profile) {
+          setIsEditing(true)
+          return
+        }
+
+        setFirstName(profile.firstName)
+        setLastName(profile.lastName)
+        setFavoriteActivites(profile.favoriteActivities)
+        if (profile.photoURL) {
+          setPictureUrl(profile.photoURL)
+        }
+      })
+      .catch(err => console.log(err))
+      .finally(() => setLoading(false))
   }
 
   useEffect(() => {
@@ -125,6 +138,7 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
       }
 
       await setProfile(profile)
+      await updateSocials(socials)
       setIsEditing(false)
       setHasUpdatedPFP(false)
     } catch (err) {
@@ -147,17 +161,16 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
   }
 
   const renderProfilePicture = () => {
-    if (!pictureUrl) {
-      return (
-        <TouchableOpacity disabled={!isEditing} onPress={pickImage} style={styles.emptyPfp} testID="empty-pfp-button"/>)
-    }
-
-    return (
+    return pictureUrl ? (
       <TouchableOpacity disabled={!isEditing} onPress={pickImage}>
         <Image
           source={{ uri: pictureUrl }}
           style={styles.pfp} testID="profile-image"/>
       </TouchableOpacity>
+    ) : (
+      <TouchableOpacity
+        disabled={!isEditing}
+        onPress={pickImage} style={styles.emptyPfp} testID="empty-pfp-button"/>
     )
   }
 
@@ -171,9 +184,16 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
     setHasUpdatedPFP(true)
   }
 
+  const setInstagram = (social: Social) => {
+    setSocials([social])
+  }
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>{renderProfilePicture()}</View>
+    <ScrollView style={styles.container}>
+      <View style={styles.background}/>
+      <View style={styles.header}>
+        {renderProfilePicture()}
+        </View>
       <View>
         <Text style={styles.name1}>Profile</Text>
         <View style={styles.name}>
@@ -193,6 +213,14 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
               value={lastName} />
           ) : <Text>{lastName}</Text>}
         </View>
+        {socials.map(social => (
+          <Text key={social.site}>{`${social.site}: ${social.username}`}</Text>
+        ))}
+        {isEditing && socials.length === 0 && (
+          <Button
+            onPress={() => setShowInstagramModal(true)}
+            title="Connect Instagram"/>
+        )}
         {/* { isEditing ? <TextInput placeholder="Location" /> :  <Text></Text> } */}
         <FlatList
           ListHeaderComponent={<Text style={styles.name}>Favorite Activities</Text>} 
@@ -203,6 +231,7 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
           onRefresh={refreshProfile}
           refreshing={loading}
           renderItem={({ item, index }) => renderActivity(item, index)} 
+          scrollEnabled={false}
           style={styles.favoriteActivities}/>
       </View>
       <View style={styles.signout}>
@@ -218,7 +247,11 @@ const ProfileScreen: FC<Props> = ({ navigation }) => {
         onDelete={deleteActivity}
         onDismiss={() => setEditingActivity(-1)}
         visible={editingActivity != -1} />
-    </View>
+      <InstagramModal
+        onConfirm={setInstagram}
+        onDismiss={() => setShowInstagramModal(false)}
+        visible={showInstagramModal}/>
+    </ScrollView>
   )
 }
 
@@ -226,16 +259,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-
   },
-
-  header: {
-    fontSize: 24,
+  background: {
     backgroundColor: "purple",
     height: 200,
+    position: 'absolute',
+    width: '100%',
+  },
+  header: {
+    marginTop: 120
   },
   pfp: {
-    marginTop: 120,
     alignSelf: 'center',
     borderRadius: 50,
     height: 120,
@@ -243,14 +277,12 @@ const styles = StyleSheet.create({
     borderColor: 'yellow',
     borderWidth: 4,
     marginBottom: 10,
-    position: 'absolute'
   },
   editActivityButton: {
     justifyContent: 'center',
     marginRight: 10,
   },
   emptyPfp: {
-    marginTop: 150,
     alignSelf: 'center',
     borderRadius: 60,
     height: 120,
@@ -258,37 +290,30 @@ const styles = StyleSheet.create({
     borderColor: 'yellow',
     borderWidth: 4,
     backgroundColor: "gray",
-    position: 'absolute'
   },
   name1: {
     flexDirection: 'row',
     fontSize: 25,
     fontWeight: "600",
-    marginTop: 100
   },
   favoriteActivities: {
     marginTop: 20,
     marginBottom: 20,
     border: 10,
-
   },
-
   name: {
     flexDirection: 'row',
     fontSize: 25,
     fontWeight: "600",
     marginTop: 10
-
   },
   nameInput: {
     borderBottomWidth: 1,
     flexGrow: 1,
     marginHorizontal: 8
   },
-
   signout: {
     borderWidth: 1
-
   }
 })
 
