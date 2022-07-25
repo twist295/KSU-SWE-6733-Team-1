@@ -20,6 +20,7 @@ import ActivityCell from '../../components/ActivityCell/ActivityCell'
 import ActivityModal from '../../components/ActivityModal/ActivityModal'
 import InstagramModal from '../../components/InstagramModal/InstagramModal'
 import {
+  deleteProfile,
   getProfile,
   getSocials,
   setProfile,
@@ -42,6 +43,7 @@ const ProfileScreen = ({ navigation }: Props) => {
   const [loading, setLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [showInstagramModal, setShowInstagramModal] = useState(false)
+  const [isNewProfile, setIsNewProfile] = useState(false)
 
   const refreshProfile = () => {
     setLoading(true)
@@ -57,10 +59,12 @@ const ProfileScreen = ({ navigation }: Props) => {
     return getProfile()
       .then(profile => {
         if (!profile) {
+          setIsNewProfile(true)
           setIsEditing(true)
           return
         }
 
+        setIsNewProfile(false)
         setFirstName(profile.firstName)
         setLastName(profile.lastName)
         setFavoriteActivites(profile.favoriteActivities)
@@ -112,7 +116,9 @@ const ProfileScreen = ({ navigation }: Props) => {
 
   const deleteActivity = (activity: Activity) => {
     const updatedFavoriteActivities = [...favoriteActivities]
-    const index = updatedFavoriteActivities.findIndex((_activity) => _activity.type === activity.type)
+    const index = updatedFavoriteActivities.findIndex(
+      (_activity) => _activity.type === activity.type
+    )
     if (index > -1) {
       updatedFavoriteActivities.splice(index, 1)
     }
@@ -139,6 +145,7 @@ const ProfileScreen = ({ navigation }: Props) => {
 
       await setProfile(profile)
       await updateSocials(socials)
+      setIsNewProfile(false)
       setIsEditing(false)
       setHasUpdatedPFP(false)
     } catch (err) {
@@ -170,7 +177,9 @@ const ProfileScreen = ({ navigation }: Props) => {
     ) : (
       <TouchableOpacity
         disabled={!isEditing}
-        onPress={pickImage} style={styles.emptyPfp} testID="empty-pfp-button"/>
+        onPress={pickImage}
+        style={styles.emptyPfp}
+        testID="empty-pfp-button"/>
     )
   }
 
@@ -184,8 +193,18 @@ const ProfileScreen = ({ navigation }: Props) => {
     setHasUpdatedPFP(true)
   }
 
+  const resetProfile = async () => {
+    try {
+      await deleteProfile()
+      await refreshProfile()
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const setInstagram = (social: Social) => {
     setSocials([social])
+    setShowInstagramModal(false)
   }
 
   return (
@@ -214,7 +233,9 @@ const ProfileScreen = ({ navigation }: Props) => {
           ) : <Text>{lastName}</Text>}
         </View>
         {socials.map(social => (
-          <Text key={social.site}>{`${social.site}: ${social.username}`}</Text>
+          <TouchableOpacity onPress={() => Linking.openURL(`https://instagram.com/${social.username}`)}>
+            <Text key={social.site}>{`${social.site}: ${social.username}`}</Text>
+          </TouchableOpacity>
         ))}
         {isEditing && socials.length === 0 && (
           <Button
@@ -234,9 +255,20 @@ const ProfileScreen = ({ navigation }: Props) => {
           scrollEnabled={false}
           style={styles.favoriteActivities}/>
       </View>
-      <View style={styles.signout}>
-        <Button color="red" title="Sign Out" onPress={signout} testID="signout-button"/>
+      <View style={styles.danger}>
+        <Button
+          color="red"
+          title="Sign Out" onPress={signout} testID="signout-button"/>
       </View>
+      {!isNewProfile && (
+        <View style={styles.danger}>
+          <Button 
+            color="red"
+            title="Delete Profile"
+            onPress={resetProfile}
+            testID="delete-profile-button"/>
+        </View>
+      )}
       <ActivityModal
         onConfirm={addActivity}
         onDismiss={() => setIsAddingActivity(false)}
@@ -312,8 +344,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginHorizontal: 8
   },
-  signout: {
-    borderWidth: 1
+  danger: {
+    borderRadius: 8,
+    borderWidth: 1,
+    margin: 8
   }
 })
 

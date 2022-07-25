@@ -40,8 +40,14 @@ const ActivityCell = ({ accessory, activity }: Props) => {
     <View style={styles.container}>
       <View>
         <Text style={styles.title}>{type}</Text>
-        <Text style={styles.skill}>{`Skill Level: ${getEnumKeys(SkillLevel)[skillLevel]}`}</Text>
-        <Text style={styles.attitude}>{`Attitude: ${getEnumKeys(Attitude)[attitude]}`}</Text>
+        <Text
+          style={styles.skill} testID="skill-level-text">
+          {`Skill Level: ${getEnumKeys(SkillLevel)[skillLevel]}`}
+        </Text>
+        <Text
+          style={styles.attitude} testID="attitude-text">
+          {`Attitude: ${getEnumKeys(Attitude)[attitude]}`}
+        </Text>
       </View>
       {accessory}
     </View>

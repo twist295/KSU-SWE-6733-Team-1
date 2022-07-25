@@ -7,6 +7,7 @@ import {
 } from 'firebase/auth'
 import {
   addDoc,
+  deleteDoc,
   collection,
   doc,
   getDoc,
@@ -102,6 +103,13 @@ export const getProfile = async (): Promise<Profile | null> => {
   } else {
     return Promise.resolve(null)
   }
+}
+
+export const deleteProfile = async () => {
+  const auth = getAuth()
+  const db = getFirestore();
+
+  return await deleteDoc(doc(db, 'profiles', auth.currentUser!.uid))
 }
 
 export const getUser = () => {
