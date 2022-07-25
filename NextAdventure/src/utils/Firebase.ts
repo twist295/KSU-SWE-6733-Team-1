@@ -19,6 +19,7 @@ import {
   setDoc,
   Timestamp,
   where,
+  GeoPoint,
 } from 'firebase/firestore'
 import { 
   getDownloadURL, 
@@ -79,18 +80,8 @@ export const signout = async () => {
 export const setProfile = async (profile: Profile) => {
   const auth = getAuth()
   const db = getFirestore();
-
-  const body: Profile = {
-    firstName: profile.firstName,
-    lastName: profile.lastName,
-    favoriteActivities: profile.favoriteActivities,
-  }
   
-  if (profile.photoURL) {
-    body.photoURL = profile.photoURL
-  }
-  
-  return await setDoc(doc(db, 'profiles', auth.currentUser!.uid), body)
+  return await setDoc(doc(db, 'profiles', auth.currentUser!.uid), profile)
 }
 
 export const getProfile = async (): Promise<Profile | null> => {

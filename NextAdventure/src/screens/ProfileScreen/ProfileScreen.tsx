@@ -1,5 +1,7 @@
 import { launchImageLibraryAsync } from 'expo-image-picker'
 import {
+  getCurrentPositionAsync, getForegroundPermissionsAsync, requestForegroundPermissionsAsync } from 'expo-location';
+import {
   useEffect,
   useState
 } from 'react'
@@ -28,7 +30,9 @@ import {
   updateProfilePicture,
   updateSocials
 } from '../../utils/Firebase'
+import { getLocation } from '../../utils/Location'
 import type { Activity, Profile, Social } from '../../utils/Type'
+import { GeoPoint } from 'firebase/firestore';
 
 const ProfileScreen = ({ navigation }: Props) => {
   const [firstName, setFirstName] = useState('')
@@ -44,6 +48,8 @@ const ProfileScreen = ({ navigation }: Props) => {
   const [isSaving, setIsSaving] = useState(false)
   const [showInstagramModal, setShowInstagramModal] = useState(false)
   const [isNewProfile, setIsNewProfile] = useState(false)
+  const [location, setLocation] = useState<GeoPoint | null>(null)
+  const [address, setAddress] = useState<string | null>(null)
 
   const refreshProfile = () => {
     setLoading(true)
@@ -68,6 +74,9 @@ const ProfileScreen = ({ navigation }: Props) => {
         setFirstName(profile.firstName)
         setLastName(profile.lastName)
         setFavoriteActivites(profile.favoriteActivities)
+        if (profile.location) {
+          setLocation(profile.location)
+        }
         if (profile.photoURL) {
           setPictureUrl(profile.photoURL)
         }
@@ -142,6 +151,9 @@ const ProfileScreen = ({ navigation }: Props) => {
       if (photoURL) {
         profile.photoURL = photoURL
       }
+      if (location) {
+        profile.location = location
+      }
 
       await setProfile(profile)
       await updateSocials(socials)
@@ -158,7 +170,8 @@ const ProfileScreen = ({ navigation }: Props) => {
   const renderActivity = (activity: Activity, index: number) => {
     const accessory = isEditing ? (
       <View style={styles.editActivityButton}>
-        <Button onPress={() => setEditingActivity(index)} title="Edit" />
+        <Button
+          onPress={() => setEditingActivity(index)} title="Edit" />
       </View>
     ) : null
 
@@ -207,6 +220,31 @@ const ProfileScreen = ({ navigation }: Props) => {
     setShowInstagramModal(false)
   }
 
+  useEffect(() => {
+    if (location) {
+      getLocation(location)
+        .then(address => {
+          if (address) {
+            setAddress(address)
+          }
+        })
+        .catch(console.log)
+    }
+  }, [location])
+
+  const syncLocation = async () => {
+    const permissions = await getForegroundPermissionsAsync()
+    if (!permissions.granted) {
+      const { status } = await requestForegroundPermissionsAsync()
+      if (status !== 'granted') {
+        return
+      }
+    }
+
+    const location = await getCurrentPositionAsync()
+    setLocation(new GeoPoint(location.coords.latitude, location.coords.longitude))
+  }
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.background}/>
@@ -233,16 +271,23 @@ const ProfileScreen = ({ navigation }: Props) => {
           ) : <Text>{lastName}</Text>}
         </View>
         {socials.map(social => (
-          <TouchableOpacity onPress={() => Linking.openURL(`https://instagram.com/${social.username}`)}>
-            <Text key={social.site}>{`${social.site}: ${social.username}`}</Text>
+          <TouchableOpacity
+            key={social.site}
+            onPress={() => Linking.openURL(`https://instagram.com/${social.username}`)}>
+            <Text testID="social-text">
+              {`${social.site}: ${social.username}`}</Text>
           </TouchableOpacity>
         ))}
+        { address && <Text testID="location-text">{`Location: ${address}`}</Text> }
+        { isEditing && (
+          <Button
+            onPress={syncLocation} title="Sync Location"/>
+        ) }
         {isEditing && socials.length === 0 && (
           <Button
             onPress={() => setShowInstagramModal(true)}
             title="Connect Instagram"/>
         )}
-        {/* { isEditing ? <TextInput placeholder="Location" /> :  <Text></Text> } */}
         <FlatList
           ListHeaderComponent={<Text style={styles.name}>Favorite Activities</Text>} 
           ListFooterComponent={isEditing ? (

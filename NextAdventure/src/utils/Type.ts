@@ -1,4 +1,5 @@
-import { Timestamp } from "firebase/firestore"
+import {
+  GeoPoint, Timestamp } from "firebase/firestore"
 
 export enum Attitude {
   Okay = 0,
@@ -32,6 +33,7 @@ export type Profile = {
   lastName: string
   photoURL?: string
   favoriteActivities: Activity[]
+  location?: GeoPoint
 }
 
 export type Social = {
