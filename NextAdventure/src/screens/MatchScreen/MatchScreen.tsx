@@ -1,4 +1,3 @@
-import { types } from '@babel/core';
 import { useEffect, useState } from 'react'
 import { 
   ActivityIndicator,
@@ -6,14 +5,17 @@ import {
   FlatList,
   Image,
   StyleSheet,
-  Text, TouchableOpacity, View 
+  Text,
+  TouchableOpacity, View 
 } from 'react-native'
 import { Directions } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import ActivityCell from '../../components/ActivityCell/ActivityCell'
 import { 
-  getProfiles, getUser, saveMatch
+  getProfiles,
+  getUser, saveMatch
 } from '../../utils/Firebase'
+import { getLocation } from '../../utils/Location'
 import type { Profile } from '../../utils/Type'
 
 const styles = StyleSheet.create({
@@ -30,7 +32,7 @@ const styles = StyleSheet.create({
   },
  
   pfp: {
-    height: '50%',
+    height: 200,
     width: '100%',
   },
 
@@ -69,20 +71,16 @@ const styles = StyleSheet.create({
     color: '#eb5559',
     fontSize: 30
   },
-
   items: {
     marginLeft: 35,
   }
-
-  
-  
-  
 })
 
 const MatchScreen = () => {
   const [potentialMatches, setPotentialMatches] = useState<Profile[]>([])
   const [cursor, setCursor] = useState(0)
   const [firstLoad, setFirstLoad] = useState(false)
+  const [address, setAddress] = useState<string | null>(null)
 
   useEffect(() => {
     getProfiles()
@@ -99,6 +97,18 @@ const MatchScreen = () => {
       })
       .catch(console.log)
   }, [])
+
+  useEffect(() => {
+    if (potentialMatches[cursor]?.location) {
+      getLocation(potentialMatches[cursor].location!)
+        .then(location => {
+          if (location) {
+            setAddress(location)
+          }
+        })
+        .catch(console.log)
+    }
+  }, [potentialMatches[cursor]])
 
   const renderActions = (direction: Directions) => {
     const onPress = (direction: Directions) => {
@@ -119,28 +129,32 @@ const MatchScreen = () => {
     )
   }
 
+  const renderHeader = () => (
+    <>
+      <Image
+        source={{ uri: potentialMatches[cursor].photoURL }}
+        style={styles.pfp}
+        testID="match-image"/>
+      <Text style={styles.name}>{potentialMatches[cursor].firstName}</Text>
+      {address && (
+        <Text style={styles.distance}>{`📍 ${address}`}</Text>
+      )}
+      <Text style={styles.header}>✨Favorite Activities✨</Text>
+    </>
+  )
+
   return (
-    //<View style={{ flex: 1 }}>
       <View style={styles.container}>
       {potentialMatches[cursor] ? (
         <Swipeable
           containerStyle={{ flex: 1 }}
           renderLeftActions={() => renderActions(Directions.LEFT)}
           renderRightActions={() => renderActions(Directions.RIGHT)}>
-          <Image
-            source={{ uri: potentialMatches[cursor].photoURL }}
-            style={styles.pfp}
-            testID="match-image"/>
-          <Text style={styles.name}>{potentialMatches[cursor].firstName}</Text>
-          <Text style={styles.distance}>📍3000 miles away</Text>
           <FlatList
-            ListHeaderComponent={<Text style={styles.header}>✨Favorite Activities✨</Text>}
+            ListHeaderComponent={renderHeader}
             data={ potentialMatches[cursor].favoriteActivities}
-            // renderItem={({ item }) => <ActivityCell activity={item} />}/>
-            renderItem={({ item }) => (<Text style={styles.items}>{<ActivityCell activity={item}/>}</Text>)}
-            />
-
-                 
+            renderItem={({ item }) => (<ActivityCell activity={item}/>)}
+            />                 
         </Swipeable>
       ) : !firstLoad ? (
         <ActivityIndicator />
