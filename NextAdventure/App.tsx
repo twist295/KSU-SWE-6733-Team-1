@@ -92,7 +92,8 @@ export default function App() {
         </Tab.Navigator>
       ) : (
         <Stack.Navigator>
-          <Stack.Screen name="Auth" component={AuthScreen} />
+          <Stack.Screen
+            name="Auth" component={AuthScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Signup" component={SignupScreen} />
         </Stack.Navigator>
       )}

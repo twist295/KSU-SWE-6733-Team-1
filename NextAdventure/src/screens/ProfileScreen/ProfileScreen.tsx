@@ -245,61 +245,59 @@ const ProfileScreen = ({ navigation }: Props) => {
     setLocation(new GeoPoint(location.coords.latitude, location.coords.longitude))
   }
 
-  return (
-    <ScrollView style={styles.container}>
-      <View style={styles.background}/>
-      <View style={styles.header}>
-        {renderProfilePicture()}
-        </View>
-      <View>
-        <Text style={styles.name1}>Profile</Text>
-        <View style={styles.name}>
-          <Text>Name: </Text>
-          {isEditing ? (
-            <TextInput
-              onChange={({ nativeEvent }) => setFirstName(nativeEvent.text)}
-              placeholder="First Name"
-              style={styles.nameInput}
-              value={firstName} />
-          ) : <Text>{firstName}</Text>}
-          {isEditing ? (
-            <TextInput
-              onChange={({ nativeEvent }) => setLastName(nativeEvent.text)}
-              placeholder="Last Name"
-              style={styles.nameInput}
-              value={lastName} />
-          ) : <Text>{lastName}</Text>}
-        </View>
-        {socials.map(social => (
-          <TouchableOpacity
-            key={social.site}
-            onPress={() => Linking.openURL(`https://instagram.com/${social.username}`)}>
-            <Text testID="social-text">
-              {`${social.site}: ${social.username}`}</Text>
-          </TouchableOpacity>
-        ))}
-        { address && <Text testID="location-text">{`Location: ${address}`}</Text> }
-        { isEditing && (
-          <Button
-            onPress={syncLocation} title="Sync Location"/>
-        ) }
-        {isEditing && socials.length === 0 && (
-          <Button
-            onPress={() => setShowInstagramModal(true)}
-            title="Connect Instagram"/>
-        )}
-        <FlatList
-          ListHeaderComponent={<Text style={styles.name}>Favorite Activities</Text>} 
-          ListFooterComponent={isEditing ? (
-            <Button title="Add New" onPress={() => setIsAddingActivity(true)}/>
-          ) : null }
-          data={favoriteActivities}
-          onRefresh={refreshProfile}
-          refreshing={loading}
-          renderItem={({ item, index }) => renderActivity(item, index)} 
-          scrollEnabled={false}
-          style={styles.favoriteActivities}/>
+  const renderHeader = () => (
+    <>
+    <View style={styles.background}/>
+    <View style={styles.header}>
+      {renderProfilePicture()}
+    </View>
+    <View>
+      <Text style={styles.name1}>Profile</Text>
+      <View style={styles.name}>
+        <Text>Name: </Text>
+        {isEditing ? (
+          <TextInput
+            onChange={({ nativeEvent }) => setFirstName(nativeEvent.text)}
+            placeholder="First Name"
+            style={styles.nameInput}
+            value={firstName} />
+        ) : <Text>{firstName}</Text>}
+        {isEditing ? (
+          <TextInput
+            onChange={({ nativeEvent }) => setLastName(nativeEvent.text)}
+            placeholder="Last Name"
+            style={styles.nameInput}
+            value={lastName} />
+        ) : <Text>{lastName}</Text>}
       </View>
+      {socials.map(social => (
+        <TouchableOpacity
+          key={social.site}
+          onPress={() => Linking.openURL(`https://instagram.com/${social.username}`)}>
+          <Text testID="social-text">
+            {`${social.site}: ${social.username}`}</Text>
+        </TouchableOpacity>
+      ))}
+      { address && <Text testID="location-text">{`Location: ${address}`}</Text> }
+      { isEditing && (
+        <Button
+          onPress={syncLocation} title="Sync Location"/>
+      ) }
+      {isEditing && socials.length === 0 && (
+        <Button
+          onPress={() => setShowInstagramModal(true)}
+          title="Connect Instagram"/>
+      )}
+      </View>
+      <Text style={styles.name}>Favorite Activities</Text>
+      </>
+  );
+
+  const renderFooter = () => (
+    <>
+      {isEditing ? (
+        <Button title="Add New" onPress={() => setIsAddingActivity(true)}/>
+      ) : null}
       <View style={styles.danger}>
         <Button
           color="red"
@@ -314,6 +312,19 @@ const ProfileScreen = ({ navigation }: Props) => {
             testID="delete-profile-button"/>
         </View>
       )}
+    </>
+  )
+
+  return (
+    <View style={styles.container}>
+        <FlatList
+          ListHeaderComponent={() => renderHeader()}
+          ListFooterComponent={() => renderFooter()}
+          data={favoriteActivities}
+          onRefresh={refreshProfile}
+          refreshing={loading}
+          renderItem={({ item, index }) => renderActivity(item, index)} 
+          style={styles.favoriteActivities}/>
       <ActivityModal
         onConfirm={addActivity}
         onDismiss={() => setIsAddingActivity(false)}
@@ -328,7 +339,7 @@ const ProfileScreen = ({ navigation }: Props) => {
         onConfirm={setInstagram}
         onDismiss={() => setShowInstagramModal(false)}
         visible={showInstagramModal}/>
-    </ScrollView>
+    </View>
   )
 }
 

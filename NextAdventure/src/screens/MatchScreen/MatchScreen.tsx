@@ -131,10 +131,12 @@ const MatchScreen = () => {
 
   const renderHeader = () => (
     <>
-      <Image
-        source={{ uri: potentialMatches[cursor].photoURL }}
-        style={styles.pfp}
-        testID="match-image"/>
+      {potentialMatches[cursor].photoURL && (
+        <Image
+          source={{ uri: potentialMatches[cursor].photoURL }}
+          style={styles.pfp}
+          testID="match-image"/>
+      )}
       <Text style={styles.name}>{potentialMatches[cursor].firstName}</Text>
       {address && (
         <Text style={styles.distance}>{`📍 ${address}`}</Text>
