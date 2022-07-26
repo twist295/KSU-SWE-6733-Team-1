@@ -25,6 +25,11 @@ const styles = StyleSheet.create({
     height: 88,
     width: 88
   },
+  profileName: {
+    fontFamily: 'AlfaSlabOne',
+    fontSize: 18,
+    marginTop: 5
+  }
 })
 
 const InboxScreen = ({ navigation }: Props) => {
@@ -66,7 +71,7 @@ const InboxScreen = ({ navigation }: Props) => {
         testID="chat-cell">
         <Image source={{ uri: profile.photoURL }} style={styles.pfp} />
         <View>
-          <Text>{profile.firstName}</Text>
+          <Text style={styles.profileName}>{profile.firstName}</Text>
           <Text>{latestMessages[profile.uid!]?.body}</Text>
           <Text>{latestMessages[profile.uid!]?.timestamp.toString()}</Text>
         </View>

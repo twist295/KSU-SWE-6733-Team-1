@@ -17,7 +17,8 @@ import { Message } from '../../utils/Type'
 const styles = StyleSheet.create({
   bar: {
     backgroundColor: 'gray',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    borderRadius: 8
   },
   container: {
     backgroundColor: 'white',
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
   },
   fromSelf: {
     alignSelf: 'flex-end',
-    backgroundColor: 'blue',
+    backgroundColor: '#6495ed',
     borderRadius: 4,
     marginBottom: 8,
     paddingHorizontal: 4,
@@ -34,23 +35,32 @@ const styles = StyleSheet.create({
     width: '66%'
   },
   fromSelfText: {
-    color: 'white'
+    color: 'white',
+    fontFamily: 'Ubuntu',
+    fontSize: 15
   },
   input: {
     backgroundColor: 'white',
     borderWidth: 1,
     flexGrow: 1,
-    margin: 8
+    margin: 8,
+    padding: 10,
+    borderRadius: 8
   },
   toSelf: {
-    backgroundColor: 'gray',
+    backgroundColor: 'lightgreen',
     borderRadius: 4,
     marginBottom: 8,
     paddingHorizontal: 4,
     paddingVertical: 8,
-    width: '66%'
+    width: '66%',
+    fontFamily: 'Ubuntu',
+    fontSize: 15
   },
   toSelfText: {
+  },
+  send: {
+    marginTop: 10
   }
 })
 
@@ -97,7 +107,9 @@ const ChatScreen = ({ navigation, route }: Props) => {
           onChange={({ nativeEvent }) => setText(nativeEvent.text)}
           style={styles.input}
           value={text} />
+          <Text style={styles.send}>
         <Button disabled={text.length === 0} onPress={onSend} title="Send"/>
+        </Text>
       </View>
     </View>
   )
